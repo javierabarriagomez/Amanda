@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".MainActivity">
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bienvenidos a\nAmanda"
+        android:id="@+id/Header"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="30dp"
+
+
+        android:textSize="36dp"></TextView>
+
+    <TextView
+        android:id="@+id/InfoData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Header"
+        android:layout_marginHorizontal="36dp"
+        android:text="Recuerda encender tu dispositivo Amanda,\nPulsando el botón por unos segundos"
+        android:textAlignment="center"
+        android:textColor="@color/Letras"
+        android:textSize="14dp"
+
+        android:textStyle="bold"></TextView>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/InfoData"
+        android:id="@+id/spacer"
+        android:layout_marginBottom="220dp">
+    </Space>
+
+    <EditText
+        android:id="@+id/Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spacer"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@color/input"
+        android:drawableLeft="@drawable/ic_baseline_person_outline_24"
+        android:drawableTint="@color/input"
+        android:hint="Ingrese nombre de usuario"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColorHint="@color/input"></EditText>
+    <EditText
+        android:id="@+id/Password"
+        android:layout_below="@id/Username"
+        android:hint="Ingrese contraseña"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingRight="10dp"
+        android:textColorHint="@color/input"
+        android:drawableLeft="@drawable/ic_baseline_lock_open_24"
+        android:drawableTint="@color/input"
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/input"
+        android:layout_height="wrap_content"></EditText>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Password"
+        android:layout_margin="10dp"
+        android:id="@+id/spacer2"></Space>
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/spacer2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#00FFFFFF"
+        android:hapticFeedbackEnabled="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/button"
+        android:id="@+id/botonLogin"
+        android:onClick="login"
+        ></ImageButton>
+
+
+
+</RelativeLayout>
