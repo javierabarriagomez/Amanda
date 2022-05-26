@@ -9,7 +9,7 @@
 
 
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Bienvenidos a\nAmanda"
@@ -23,9 +23,9 @@
         android:layout_marginHorizontal="30dp"
 
 
-        android:textSize="36dp"></TextView>
+        android:textSize="36dp"></TextView>-->
 
-    <TextView
+    <!--<TextView
         android:id="@+id/InfoData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,20 +36,30 @@
         android:textColor="@color/Letras"
         android:textSize="14dp"
 
-        android:textStyle="bold"></TextView>
-    <Space
+        android:textStyle="bold"></TextView>-->
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/InfoData"
-        android:id="@+id/spacer"
-        android:layout_marginBottom="220dp">
-    </Space>
+        android:layout_height="450dp">
+
+
+        <androidx.viewpager.widget.PagerTitleStrip
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom
+">
+        </androidx.viewpager.widget.PagerTitleStrip>
+
+    </androidx.viewpager.widget.ViewPager>
 
     <EditText
         android:id="@+id/Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spacer"
+        android:layout_below="@id/viewpager"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:backgroundTint="@color/input"

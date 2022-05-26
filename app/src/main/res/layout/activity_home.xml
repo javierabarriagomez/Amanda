@@ -15,7 +15,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="19dp" />
+            android:layout_height="27dp" />
 
         <ImageButton
             android:id="@+id/imageButton15"
@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="112dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/lorena" />
 
@@ -74,14 +74,16 @@
                     android:layout_weight="1"
                     android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/presion" />
+                    app:srcCompat="@drawable/presion"
+                    android:onClick="presion"/>
 
                 <ImageButton
                     android:id="@+id/imageButton8"
                     android:layout_width="wrap_content"
                     android:layout_height="120dp"
-                    android:background="#00FFFFFF"
                     android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:onClick="temperatura"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/temperatura" />
             </LinearLayout>
@@ -138,7 +140,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="32dp" />
+            android:layout_height="15dp" />
 
         <ImageButton
             android:id="@+id/imageButton14"
@@ -147,6 +149,10 @@
             android:background="#00FFFFFF"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/floating" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="27dp" />
 
     </LinearLayout>
 

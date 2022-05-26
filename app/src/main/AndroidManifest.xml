@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".TemperaturaCorporal"
+            android:exported="true" />
+        <activity
+            android:name=".PresionSanguinea"
+            android:exported="true" />
+        <activity
             android:name=".homeActivity"
             android:exported="true" />
         <activity

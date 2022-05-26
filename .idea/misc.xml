@@ -5,6 +5,9 @@
       <map>
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24231536926147704" />
+        <entry key="app/src/main/res/layout/activity_presion_sanguinea.xml" value="0.32083333333333336" />
+        <entry key="app/src/main/res/layout/activity_temperatura_corporal.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/fragment_inicio.xml" value="0.26614583333333336" />
       </map>
     </option>
