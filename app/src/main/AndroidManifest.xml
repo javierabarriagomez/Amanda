@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".Saturacion"
+            android:exported="true" />
+        <activity
             android:name=".TemperaturaCorporal"
             android:exported="true" />
         <activity

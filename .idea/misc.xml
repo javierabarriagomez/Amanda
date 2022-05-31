@@ -3,12 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/font/montserrat.xml" value="0.3645833333333333" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.4036458333333333" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.24231536926147704" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_presion_sanguinea.xml" value="0.32083333333333336" />
+        <entry key="app/src/main/res/layout/activity_saturacion.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_temperatura_corporal.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/fragment_inicio.xml" value="0.26614583333333336" />
+        <entry key="app/src/main/res/layout/main_item_1.xml" value="0.1816123188405797" />
+        <entry key="app/src/main/res/layout/main_item_2.xml" value="0.1816123188405797" />
+        <entry key="app/src/main/res/layout/main_item_3.xml" value="0.1816123188405797" />
+        <entry key="app/src/main/res/layout/main_item_4.xml" value="0.1816123188405797" />
       </map>
     </option>
   </component>

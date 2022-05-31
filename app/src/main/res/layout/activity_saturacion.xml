@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".TemperaturaCorporal">
+    tools:context=".Saturacion">
 
 
     <LinearLayout
@@ -50,58 +49,37 @@
             android:layout_height="38dp" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="136dp"
-            app:srcCompat="@drawable/temperatura_corporal"
-            tools:ignore="MissingConstraints" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="70dp" />
+            android:layout_height="134dp"
+            app:srcCompat="@drawable/saturacion" />
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:text="0.0 °C"
-            android:textAlignment="center"
-            android:textColor="#9E9E9E"
-            android:textSize="34sp"
-            android:textStyle="normal|bold" />
-
-        <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Normal"
-            android:textAlignment="center"
-            android:textColor="@color/input"
-            android:textSize="20sp" />
+            android:text="1.- Ubique el dedo índice sutilmente cubriendo el sensor como se muestra en la imagen.\n\n2.- Inicie la medición. Se encenderá una luz roja, mantenga el dedo sobre el sensor hasta que la luz roja se apague."
+            android:textColor="@color/input" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="17dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:max="100"
-            android:pointerIcon="context_menu"
-            android:progress="50"
-            android:progressBackgroundTintMode="add"
-            android:progressTint="@color/Letras" />
+            android:orientation="horizontal">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="136dp"
+                app:srcCompat="@drawable/ilustracion_4"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ilustra05" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/imageButton"
