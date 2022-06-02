@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:fitsSystemWindows="true"
@@ -71,6 +72,7 @@
         android:hint="Ingrese nombre de usuario"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:singleLine="true"
         android:textColorHint="@color/input"></EditText>
 
     <EditText
@@ -87,6 +89,7 @@
         android:hint="Ingrese contraseña"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:singleLine="true"
         android:textColorHint="@color/input"></EditText>
 
     <Space

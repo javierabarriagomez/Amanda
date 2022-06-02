@@ -8,17 +8,49 @@
     tools:context=".PresionSanguinea">
 
 
-    <LinearLayout
-        android:id="@+id/menu_iid"
+    <ImageView
+        android:id="@+id/imageView5"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fondo_" />
 
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/amanda_mini" />
+
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="match_parent"
+        android:layout_height="97dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/sustracci_n_14" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="30dp">
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,28 +66,68 @@
                 app:srcCompat="@drawable/menu"
                 tools:ignore="SpeakableTextPresentCheck" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <ImageButton
                 android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:background="#00FFFFFF"
                 android:scaleType="fitEnd"
-                app:srcCompat="@drawable/lorena"
+                app:srcCompat="@drawable/perfil_2"
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView13"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButton14"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:adjustViewBounds="true"
+            android:background="#00FFFFFF"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/floating" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="27dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_iid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView13"
+        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        tools:layout_editor_absoluteX="30dp">
+
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="136dp"
+            android:layout_height="85dp"
             app:srcCompat="@drawable/presion_sanguinea_imagen"
             tools:ignore="MissingConstraints" />
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="264dp"
             app:srcCompat="@drawable/presion_instruccion_1" />
 
         <ImageButton
@@ -65,20 +137,9 @@
 
 
             android:background="#0000"
+            android:onClick="comenzarMedicion"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/iniciar_medicion" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="48dp" />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="#00FFFFFF"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/floating" />
 
     </LinearLayout>
 

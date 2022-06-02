@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="fondoLogin">#F7B133</color>
     <color name="Letras">#BABF2F</color>
-    <color name="input">#727609</color>
+    <color name="input">#73760A</color>
+    <color name="textoBase">#878482</color>
 </resources>

@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".Saturacion">
+    android:scrollbarStyle="outsideInset"
+    tools:context=".glucosa2">
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/imageView30"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
@@ -18,17 +19,17 @@
         app:srcCompat="@drawable/fondo_" />
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/imageView31"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/amanda_mini" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView32"
         android:layout_width="match_parent"
         android:layout_height="97dp"
         android:scaleType="fitXY"
@@ -36,28 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/sustracci_n_14" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="1dp">
-
-        <ImageButton
-            android:id="@+id/imageButton14"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:adjustViewBounds="true"
-            android:background="#00FFFFFF"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/floating" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="27dp" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -105,42 +84,103 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="469dp"
-        android:layout_marginHorizontal="30dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:srcCompat="@drawable/saturacion" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1.- Ubique el dedo índice sutilmente cubriendo el sensor como se muestra en la imagen. 2.- Inicie la medición. Se encenderá una luz roja, mantenga el dedo sobre el sensor hasta que la luz roja se apague."
-            android:textColor="#73760A" />
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="match_parent"
-            android:layout_height="182dp"
-            app:srcCompat="@drawable/ilustracion_4" />
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/imageButton14"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:background="#FFFFFF"
-            android:onClick="comenzarMedicion"
+            android:layout_height="80dp"
+            android:adjustViewBounds="true"
+            android:background="#00FFFFFF"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/iniciar_medicion" />
+            app:srcCompat="@drawable/floating" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="27dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_iid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView32"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="30dp">
+
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            app:srcCompat="@drawable/glucosa_sangre"
+            tools:ignore="MissingConstraints" />
+
+        <ProgressBar
+            android:id="@+id/progressBar5"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundTint="@color/input"
+            android:indeterminate="false"
+            android:progress="50"
+            android:progressTint="@color/input"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/textoBase"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="mmo/L"
+                android:textAlignment="center"
+                android:textColor="@color/textoBase"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar6"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:progress="50"
+            android:progressTint="@color/input" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="match_parent"
+            android:layout_height="73dp"
+
+
+            android:background="#0000"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/detener_medicion" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

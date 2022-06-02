@@ -5,10 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 
-import android.widget.Gallery
-
-
-
 
 class homeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +20,21 @@ class homeActivity : AppCompatActivity() {
     }
     fun temperatura(view: View) {
         val intent = Intent(this,TemperaturaCorporal::class.java)
+        startActivity(intent)
+        // Do something in response to button click
+    }
+    fun saturacion(view: View) {
+        val intent = Intent(this,Saturacion::class.java)
+        startActivity(intent)
+        // Do something in response to button click
+    }
+    fun glucosa(view: View) {
+        val intent = Intent(this,glucosa::class.java)
+        startActivity(intent)
+        // Do something in response to button click
+    }
+    fun ecg(view: View) {
+        val intent = Intent(this,ecg::class.java)
         startActivity(intent)
         // Do something in response to button click
     }

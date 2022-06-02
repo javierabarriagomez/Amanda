@@ -7,18 +7,50 @@
     android:background="#FFFFFF"
     tools:context=".TemperaturaCorporal">
 
+    <ImageView
+        android:id="@+id/imageView20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fondo_" />
+
+    <ImageView
+        android:id="@+id/imageView21"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView20"
+        app:layout_constraintTop_toTopOf="@+id/imageView20"
+        app:srcCompat="@drawable/amanda_mini" />
+
+    <ImageView
+        android:id="@+id/imageView22"
+        android:layout_width="match_parent"
+        android:layout_height="97dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/sustracci_n_14" />
 
     <LinearLayout
-        android:id="@+id/menu_iid"
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:orientation="vertical">
-
+        android:layout_marginBottom="2dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,74 +66,55 @@
                 app:srcCompat="@drawable/menu"
                 tools:ignore="SpeakableTextPresentCheck" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <ImageButton
                 android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:background="#00FFFFFF"
                 android:scaleType="fitEnd"
-                app:srcCompat="@drawable/lorena"
+                app:srcCompat="@drawable/perfil_2"
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="38dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_iid"
+        android:layout_width="285dp"
+        android:layout_height="447dp"
+        android:layout_marginHorizontal="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView12">
+
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="136dp"
+            android:layout_height="96dp"
             app:srcCompat="@drawable/temperatura_corporal"
             tools:ignore="MissingConstraints" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="70dp" />
-
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:text="0.0 °C"
-            android:textAlignment="center"
-            android:textColor="#9E9E9E"
-            android:textSize="34sp"
-            android:textStyle="normal|bold" />
-
-        <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Normal"
-            android:textAlignment="center"
-            android:textColor="@color/input"
-            android:textSize="20sp" />
+            android:text="1.- Ubique el dedo índice sutilmente cubriendo el sensor como se muestra en la imagen.\n2.- Inicie la medición. Se encenderá una luz roja, mantenga el dedo sobre el sensor hasta que la luz roja se apague."
+            android:textColor="@color/input" />
 
-        <Space
+        <ImageView
+            android:id="@+id/imageView23"
             android:layout_width="match_parent"
-            android:layout_height="17dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:max="100"
-            android:pointerIcon="context_menu"
-            android:progress="50"
-            android:progressBackgroundTintMode="add"
-            android:progressTint="@color/Letras" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="139dp"
+            app:srcCompat="@drawable/ilustra07" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -110,22 +123,31 @@
 
 
             android:background="#0000"
+            android:onClick="comenzarMedicion"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/iniciar_medicion" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="48dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="30dp">
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/imageButton14"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/floating" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="27dp" />
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

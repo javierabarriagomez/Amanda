@@ -5,15 +5,36 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Amanda v2.0"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".Saturacion"
+            android:name=".ecg_2"
+            android:exported="true" />
+        <activity
+            android:name=".ecg"
+            android:exported="true" />
+        <activity
+            android:name=".glucosa2"
+            android:exported="true" />
+        <activity
+            android:name=".glucosa"
+            android:exported="true" />
+        <activity
+            android:name=".Saturacion_2"
             android:exported="true" />
         <activity
             android:name=".TemperaturaCorporal"
+            android:exported="true" />
+        <activity
+            android:name=".PresionSanguinea_2"
+            android:exported="true" />
+        <activity
+            android:name=".Saturacion"
+            android:exported="true" />
+        <activity
+            android:name=".TemperaturaCorporal_2"
             android:exported="true" />
         <activity
             android:name=".PresionSanguinea"
@@ -23,7 +44,8 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -5,16 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 
-class TemperaturaCorporal : AppCompatActivity() {
+class glucosa : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_temperatura_corporal)
+        setContentView(R.layout.activity_glucosa)
     }
-
-
     fun comenzarMedicion(view: View){
-        val intent = Intent(this,TemperaturaCorporal_2::class.java)
+        val intent = Intent(this,glucosa2::class.java)
         startActivity(intent)
-
     }
 }
