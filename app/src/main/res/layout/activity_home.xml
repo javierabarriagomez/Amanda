@@ -30,6 +30,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/menu" />
 
+    <Button
+        android:id="@+id/botonConectar"
+        android:layout_width="116dp"
+        android:layout_height="58dp"
+        android:onClick="iniciarBusqueda"
+        android:text="Conectar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"

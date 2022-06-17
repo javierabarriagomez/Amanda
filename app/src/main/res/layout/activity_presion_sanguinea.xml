@@ -131,7 +131,7 @@
             app:srcCompat="@drawable/presion_instruccion_1" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/botonMedicionGlucosa"
             android:layout_width="match_parent"
             android:layout_height="73dp"
 

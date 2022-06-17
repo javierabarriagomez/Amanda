@@ -357,7 +357,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/respiracion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
@@ -370,14 +370,15 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/botonMedicionGlucosa"
             android:layout_width="match_parent"
             android:layout_height="73dp"
 
 
             android:background="#0000"
+            android:onClick="iniciarMedicion"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/detener_medicion" />
+            app:srcCompat="@drawable/iniciar_medicion" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

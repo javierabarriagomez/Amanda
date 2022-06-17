@@ -270,6 +270,8 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="#FFFFFF"
+            android:clickable="true"
+            android:onClick="tomarMedicion"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/detener_medicion" />
 
