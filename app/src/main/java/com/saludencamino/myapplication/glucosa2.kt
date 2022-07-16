@@ -1,6 +1,5 @@
 package com.saludencamino.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -8,6 +7,11 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.linktop.MonitorDataTransmissionManager
+import com.linktop.constant.BgPagerCaliCode
+import com.linktop.infs.OnBgResultListener
+import com.linktop.whealthService.task.BgTask
 import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.BgEvent
 import com.mintti.visionsdk.ble.bean.MeasureType
@@ -15,7 +19,7 @@ import com.mintti.visionsdk.ble.callback.IBgResultListener
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 
 class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
-    IBleWriteResponse {
+    IBleWriteResponse, OnBgResultListener {
     private val MSG_ADJUST_FAILED = 2
     private val MSG_WAIT_INSERT = 3
     private val MSG_WAIT_DRIP = 4
@@ -44,14 +48,28 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     fun iniciarMedicion(view: View){
         if(!enMedicion){
             botonMedicionGlucosa?.setImageResource(R.drawable.detener_medicion)
-            BleManager.getInstance().setBgResultListener(this)
-            BleManager.getInstance().startMeasure(MeasureType.TYPE_BG,this)
+
+
+            if((this.application as App).version != 1) {
+                BleManager.getInstance().setBgResultListener(this)
+                BleManager.getInstance().startMeasure(MeasureType.TYPE_BG,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().setOnBgResultListener(this)
+                MonitorDataTransmissionManager.getInstance().setBgPagerCaliCode(BgPagerCaliCode.C16);
+                MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.BG)
+            }
+
             enMedicion=true
         }else{
             mensaje?.setText("").toString()
             botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
-            BleManager.getInstance().setBgResultListener(this)
-            BleManager.getInstance().stopMeasure(MeasureType.TYPE_BG,this)
+            if((this.application as App).version != 1) {
+                BleManager.getInstance().setBgResultListener(this)
+                BleManager.getInstance().stopMeasure(MeasureType.TYPE_BG,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().stopMeasure()
+            }
+
             enMedicion=false
 
         }
@@ -102,5 +120,54 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
     override fun onWriteFailed() {
 
+    }
+
+    override fun onBgEvent(eventId: Int, Object: Any?) {
+        when(eventId){
+            1 ->{
+                mensaje?.setText("El test ha sido insertado en el dispositivo").toString()
+            }
+            BgTask.EVENT_PAGER_READ ->{
+                mensaje?.setText("Esperando muestra de sangre").toString()
+
+            }
+        BgTask.EVENT_BLOOD_SAMPLE_DETECTING ->{
+            mensaje?.setText("Analizando muestra").toString()
+        }
+        BgTask.EVENT_TEST_RESULT ->{
+            var resa = Object as Double;
+            var res = resa*100/7.0;
+
+
+            resultado?.setText(res.toString()).toString()
+            resultadoBarra?.setProgress(res.toInt(),true)
+            resultadoBarra2?.setProgress(res.toInt(),true)
+            mensaje?.setText("Examen finalizado").toString()
+            enMedicion=false
+            botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
+        }
+        }
+    }
+
+    override fun onBgException(p0: Int) {
+        when(p0){
+            0 ->{ //BgTask.EXCEPTION_PAGER_OUT
+                mensaje?.setText("El test no esta insertado en el dispositivo").toString()
+            }
+            BgTask.EXCEPTION_TIMEOUT_FOR_CHECK_PAGER_IN ->{
+                mensaje?.setText("Error porfavor volver a intentar").toString()
+            }
+            BgTask.EXCEPTION_PAPER_USED ->{
+                mensaje?.setText("El Test ya fue utilizado").toString()
+            }
+            BgTask.EXCEPTION_TESTING_PAPER_OUT ->{
+                mensaje?.setText("El test fue retirado del dispositivo antes de tiempo.").toString()
+            }
+            BgTask.EXCEPTION_TIMEOUT_FOR_DETECT_BLOOD_SAMPLE ->{
+                mensaje?.setText("Error porfavor volver a intentar").toString()
+            }
+        }
+        botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
+        enMedicion=false
     }
 }

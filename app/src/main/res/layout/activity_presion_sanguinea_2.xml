@@ -245,7 +245,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="50"
+            android:max="200"
+            android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -261,7 +262,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="50"
+            android:max="200"
+            android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -273,7 +275,7 @@
             android:clickable="true"
             android:onClick="tomarMedicion"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/detener_medicion" />
+            app:srcCompat="@drawable/iniciar_medicion" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,14 +19,10 @@ import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 import com.mintti.visionsdk.ble.callback.ISpo2ResultListener
 import com.jjoe64.graphview.series.LineGraphSeries
 import android.app.Activity
+import com.linktop.MonitorDataTransmissionManager
+import com.linktop.infs.OnSpO2ResultListener
 
-
-
-
-
-
-
-class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,Handler.Callback{
+class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,Handler.Callback,OnSpO2ResultListener{
     private var isRunning: Boolean = false
     private var progressBar: ProgressBar? = null
     private var tiempo: Double = 0.0
@@ -35,8 +31,6 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     private var series: LineGraphSeries<DataPoint>? = null
     private var resultado: TextView? = null
     private var corazonUI: TextView? = null
-
-
     private var botonInicio: ImageButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +53,14 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
         if(!isRunning){
             botonInicio?.setImageResource(R.drawable.detener_medicion)
-            BleManager.getInstance().setSpo2ResultListener(this)
-            BleManager.getInstance().startMeasure(MeasureType.TYPE_SPO2,this)
+            if((this.application as App).version != 1) {
+                BleManager.getInstance().setSpo2ResultListener(this)
+                BleManager.getInstance().startMeasure(MeasureType.TYPE_SPO2,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().setOnSpO2ResultListener(this)
+                MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.SPO2)
+            }
+
             tiempo = 0.0
             isRunning=true
             series = LineGraphSeries();
@@ -68,7 +68,13 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             graph?.addSeries(series)
         }else{
             botonInicio?.setImageResource(R.drawable.iniciar_medicion)
-            BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
+            if((this.application as App).version != 1) {
+                BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().stopMeasure()
+
+            }
+
             isRunning=false;
             tiempo = 0.0
             series = LineGraphSeries();
@@ -81,6 +87,8 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         })
 
     }
+
+    //version 2.0
 
     override fun onWaveData(p0: Int) {
         tiempo+=1
@@ -129,6 +137,48 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     override fun handleMessage(p0: Message): Boolean {
         println(p0)
         return true
+    }
+
+
+    //Version 1.0
+
+    override fun onSpO2Result(corazon: Int, spo2: Int) {
+        println("Finalizado");
+        println(corazon);
+        println(spo2);
+        progressBar?.progress = spo2.toInt()
+        resultado?.setText(spo2.toString() + " %").toString()
+        corazonUI?.setText(corazon.toString() + " BPM").toString()
+        if(spo2 > 95.0){
+            resultadoText?.text = "Normal"
+        }else if(spo2 < 95.0 && spo2 > 91.0){
+            resultadoText?.text = "Bajo"
+        }else{
+            resultadoText?.text = "Extremadamente Bajo"
+        }
+
+        if(corazon != 0 && spo2 != 0){
+            botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            MonitorDataTransmissionManager.getInstance().stopMeasure()
+            toastFinalizado()
+            isRunning=false;
+            tiempo = 0.0
+            series = LineGraphSeries();
+
+
+        }
+    }
+
+    override fun onSpO2Wave(p0: Int) {
+
+    }
+
+    override fun onSpO2End() {
+        return
+    }
+
+    override fun onFingerDetection(p0: Int) {
+        return
     }
 
 

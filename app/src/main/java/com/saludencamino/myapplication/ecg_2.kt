@@ -14,13 +14,15 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.kl.vision_ecg.ISmctAlgoCallback
 import com.kl.vision_ecg.SmctConstant
+import com.linktop.MonitorDataTransmissionManager
+import com.linktop.infs.OnEcgResultListener
 import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.MeasureType
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 import com.mintti.visionsdk.ble.callback.IEcgResultListener
 
 class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handler.Callback,
-    ISmctAlgoCallback{
+    ISmctAlgoCallback,OnEcgResultListener{
 
     private var botonMedicion: ImageButton? = null
     private var enMedicion:Boolean = false
@@ -61,8 +63,14 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         if(!enMedicion){
             botonMedicion?.setImageResource(R.drawable.detener_medicion)
 
-            BleManager.getInstance().setEcgResultListener(this)
-            BleManager.getInstance().startMeasure(MeasureType.TYPE_ECG,this)
+            if((this.application as App).version != 1) {
+                BleManager.getInstance().setEcgResultListener(this)
+                BleManager.getInstance().startMeasure(MeasureType.TYPE_ECG,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().setOnEcgResultListener(this)
+                MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.ECG)
+            }
+
             series = LineGraphSeries();
             graph?.removeAllSeries()
             tiempo = 0.0
@@ -72,7 +80,13 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             enMedicion=true
         }else{
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
-            BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+
+            if((this.application as App).version != 1) {
+                BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().stopMeasure()
+            }
+
             enMedicion=false
         }
 
@@ -118,7 +132,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun onEcgResult(rrMax: Int, rrMin: Int, hrv: Int) {
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             this.rpiMax?.setText(rrMax.toString()).toString()
-            this.rpiMax?.setText(rrMin.toString()).toString()
+            this.rpiMin?.setText(rrMin.toString()).toString()
             this.hrv?.setText(hrv.toString()).toString()
         })
 
@@ -126,6 +140,10 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onEcgDuration(p0: Int, p1: Boolean) {
+
+        if(p0 >= 40){
+            BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+        }
 
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             tiempo = p0.toDouble()
@@ -140,7 +158,6 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
             enMedicion=false
         }
-
     }
 
     override fun handleMessage(p0: Message): Boolean {
@@ -154,4 +171,59 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun algoData(p0: Int, p1: Int, p2: Int) {
 
     }
+
+    override fun onDrawWave(p0: Any?) {
+        return
+    }
+
+
+    override fun onSignalQuality(p0: Int) {
+        return
+    }
+
+    override fun onECGValues(key: Int, value: Int) {
+        this@ecg_2.runOnUiThread(java.lang.Runnable {
+
+            when(key){
+                0 ->{ //RRI MAX
+                    this.rpiMax?.setText(value.toString()).toString()
+                }
+                1 ->{ //RRI MIN
+                    this.rpiMin?.setText(value.toString()).toString()
+                }
+                2 ->{ //HR
+                    this.ritmoCardiaco?.setText(value.toString()).toString()
+                }
+                3 ->{ //HRV
+                    this.hrv?.setText(value.toString()).toString()
+                }
+                4 ->{ //MOOD
+
+                }
+                5 ->{ //RR
+                    respiracion?.setText(value.toString()).toString()
+                }
+            }
+        })
+
+
+    }
+
+    override fun onEcgDuration(p0: Long) {
+        MonitorDataTransmissionManager.getInstance().stopMeasure()
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        enMedicion=false
+        if(p0 >= 40){
+            MonitorDataTransmissionManager.getInstance().stopMeasure()
+        }
+
+        this@ecg_2.runOnUiThread(java.lang.Runnable {
+            tiempo = p0.toDouble()
+            graph?.onDataChanged(true,true)
+            duracion?.setText(p0.toString()).toString()
+        })
+        graph?.onDataChanged(true,true)
+        duracion?.setText(p0.toString()).toString()
+    }
+
 }

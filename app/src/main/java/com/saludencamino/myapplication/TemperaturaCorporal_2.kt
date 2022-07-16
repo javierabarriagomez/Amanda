@@ -1,10 +1,11 @@
 package com.saludencamino.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.linktop.MonitorDataTransmissionManager
 import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.MeasureType
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
@@ -34,23 +35,47 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
     }
     fun tomarMedicion(view: View){
         println("Empezando medicion")
+
+        println((this.application as App).version )
+
+
         progressOverlay?.visibility = View.VISIBLE;
-        BleManager.getInstance().setBtResultListener {
-            println(it)
+
+        if((this.application as App).version != 1){
 
 
-            resultado?.setText(it.toString() + " °C").toString()
-            progressBar?.progress = it.toInt()
-            if(it < 36.5){
-                textoResultado?.setText("Baja").toString()
-            }else if(it > 36.5 && it < 37.5 ){
-                textoResultado?.setText("Normal").toString()
-            }else{
-                textoResultado?.setText("Alta").toString()
+            BleManager.getInstance().setBtResultListener {
+                println(it)
+                resultado?.setText(it.toString() + " °C").toString()
+                progressBar?.progress = it.toInt()
+                if(it < 36.5){
+                    textoResultado?.setText("Baja").toString()
+                }else if(it > 36.5 && it < 37.5 ){
+                    textoResultado?.setText("Normal").toString()
+                }else{
+                    textoResultado?.setText("Alta").toString()
+                }
+                ocultarOverlay()
             }
-            ocultarOverlay()
+            BleManager.getInstance().startMeasure(MeasureType.TYPE_BT,this)
+        }else{
+            MonitorDataTransmissionManager.getInstance().setOnBtResultListener{
+                println(it)
+                resultado?.setText(it.toString() + " °C").toString()
+                progressBar?.progress = it.toInt()
+                if(it < 36.5){
+                    textoResultado?.setText("Baja").toString()
+                }else if(it > 36.5 && it < 37.5 ){
+                    textoResultado?.setText("Normal").toString()
+                }else{
+                    textoResultado?.setText("Alta").toString()
+                }
+                ocultarOverlay()
+            }
+            MonitorDataTransmissionManager.getInstance()
+                .startMeasure(com.linktop.whealthService.MeasureType.BT)
+
         }
-        BleManager.getInstance().startMeasure(MeasureType.TYPE_BT,this)
     }
     override fun onWriteSuccess() {
         println("WRITE SUCCESS")
