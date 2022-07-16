@@ -1,5 +1,6 @@
 package com.saludencamino.myapplication
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -101,6 +102,11 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     override fun onBgResult(p0: Double) {
         var res = p0*100/7.0;
 
+        val prefs = getSharedPreferences(
+            "com.saludencamino.myapplication", Context.MODE_PRIVATE
+        )
+        prefs.edit().putFloat("glucosa",res.toFloat()).apply();
+
 
         resultado?.setText(p0.toString()).toString()
         resultadoBarra?.setProgress(res.toInt(),true)
@@ -138,7 +144,10 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             var resa = Object as Double;
             var res = resa*100/7.0;
 
-
+            val prefs = getSharedPreferences(
+                "com.saludencamino.myapplication", Context.MODE_PRIVATE
+            )
+            prefs.edit().putFloat("glucosa",res.toFloat()).apply();
             resultado?.setText(res.toString()).toString()
             resultadoBarra?.setProgress(res.toInt(),true)
             resultadoBarra2?.setProgress(res.toInt(),true)

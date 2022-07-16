@@ -3,6 +3,7 @@ package com.saludencamino.myapplication
 import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGattService
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -318,6 +319,17 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         }
     }
 
+
+
+    fun enviarDatos(view: View){
+        val prefs = getSharedPreferences(
+            "com.saludencamino.myapplication", Context.MODE_PRIVATE
+        )
+
+        val restoredText = prefs.getFloat("temperatura", 0F)
+
+        println(restoredText);
+    }
     override fun onUpdateDialogBleList() {
         println("Hola")
     }

@@ -19,6 +19,7 @@ import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 import com.mintti.visionsdk.ble.callback.ISpo2ResultListener
 import com.jjoe64.graphview.series.LineGraphSeries
 import android.app.Activity
+import android.content.Context
 import com.linktop.MonitorDataTransmissionManager
 import com.linktop.infs.OnSpO2ResultListener
 
@@ -49,8 +50,6 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
 
     fun tomarMedicion(view: View){
-
-
         if(!isRunning){
             botonInicio?.setImageResource(R.drawable.detener_medicion)
             if((this.application as App).version != 1) {
@@ -60,10 +59,9 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
                 MonitorDataTransmissionManager.getInstance().setOnSpO2ResultListener(this)
                 MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.SPO2)
             }
-
             tiempo = 0.0
             isRunning=true
-            series = LineGraphSeries();
+            series = LineGraphSeries()
             graph?.removeAllSeries()
             graph?.addSeries(series)
         }else{
@@ -72,7 +70,6 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
                 BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
             }else{
                 MonitorDataTransmissionManager.getInstance().stopMeasure()
-
             }
 
             isRunning=false;
@@ -116,7 +113,13 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         if(corazon != 0 && spo2 != 0.0){
             botonInicio?.setImageResource(R.drawable.iniciar_medicion)
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
+            val prefs = getSharedPreferences(
+                "com.saludencamino.myapplication", Context.MODE_PRIVATE
+            )
+            prefs.edit().putFloat("saturacion_spo2",spo2.toFloat()).apply();
+            prefs.edit().putInt("saturacion_corazon",corazon).apply();
             toastFinalizado()
+
             isRunning=false;
             tiempo = 0.0
             series = LineGraphSeries();
@@ -143,6 +146,11 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     //Version 1.0
 
     override fun onSpO2Result(corazon: Int, spo2: Int) {
+        val prefs = getSharedPreferences(
+            "com.saludencamino.myapplication", Context.MODE_PRIVATE
+        )
+        prefs.edit().putInt("saturacion_spo2",spo2).apply();
+        prefs.edit().putInt("saturacion_corazon",corazon).apply();
         println("Finalizado");
         println(corazon);
         println(spo2);

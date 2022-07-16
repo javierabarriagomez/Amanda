@@ -1,5 +1,6 @@
 package com.saludencamino.myapplication
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -9,6 +10,7 @@ import com.linktop.MonitorDataTransmissionManager
 import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.MeasureType
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
+
 
 class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
 
@@ -38,13 +40,15 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
 
         println((this.application as App).version )
 
-
         progressOverlay?.visibility = View.VISIBLE;
 
         if((this.application as App).version != 1){
 
-
             BleManager.getInstance().setBtResultListener {
+                val prefs = getSharedPreferences(
+                    "com.saludencamino.myapplication", Context.MODE_PRIVATE
+                )
+                prefs.edit().putFloat("temperatura",it.toFloat()).apply();
                 println(it)
                 resultado?.setText(it.toString() + " °C").toString()
                 progressBar?.progress = it.toInt()
@@ -60,6 +64,10 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
             BleManager.getInstance().startMeasure(MeasureType.TYPE_BT,this)
         }else{
             MonitorDataTransmissionManager.getInstance().setOnBtResultListener{
+                val prefs = getSharedPreferences(
+                    "com.saludencamino.myapplication", Context.MODE_PRIVATE
+                )
+                prefs.edit().putFloat("temperatura",it.toFloat()).apply();
                 println(it)
                 resultado?.setText(it.toString() + " °C").toString()
                 progressBar?.progress = it.toInt()

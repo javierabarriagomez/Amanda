@@ -1,5 +1,6 @@
 package com.saludencamino.myapplication
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import com.linktop.MonitorDataTransmissionManager
 import com.linktop.infs.OnBpResultListener
 import com.mintti.visionsdk.ble.BleManager
@@ -25,6 +27,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     private var botonMedicion: ImageButton? = null
     private var barra_sis: ProgressBar? = null
     private var barra_dias: ProgressBar? = null
+    private var enMedicion:Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,15 +48,34 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     fun tomarMedicion(view: View){
         println("Empezando medicion")
 
-        if((this.application as App).version != 1){
-            BleManager.getInstance().setBpResultListener(this)
-            BleManager.getInstance().startMeasure(MeasureType.TYPE_BP,this)
+        if(!enMedicion){
+
+            if((this.application as App).version != 1){
+                BleManager.getInstance().setBpResultListener(this)
+                BleManager.getInstance().startMeasure(MeasureType.TYPE_BP,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().setOnBpResultListener(this);
+                MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.BP)
+            }
+            enMedicion = true
+            this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "Iniciando medición", Toast.LENGTH_SHORT).show()
+            })
+            botonMedicion?.setImageResource(R.drawable.detener_medicion)
         }else{
-            MonitorDataTransmissionManager.getInstance().setOnBpResultListener(this);
-            MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.BP)
+            if((this.application as App).version != 1){
+                BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
+            }else{
+                MonitorDataTransmissionManager.getInstance().stopMeasure()
+            }
+            enMedicion=false;
+            this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "Se detuvo la medición", Toast.LENGTH_SHORT).show()
+            })
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+
         }
 
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
 
 
     }
@@ -77,29 +99,62 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         }else{
             MonitorDataTransmissionManager.getInstance().stopMeasure()
         }
+
+        val prefs = getSharedPreferences(
+            "com.saludencamino.myapplication", Context.MODE_PRIVATE
+        )
+        prefs.edit().putInt("presion_sistolica",sys).apply();
+        prefs.edit().putInt("presion_diastolica",dias).apply();
+        prefs.edit().putInt("presion_ritmo",hr).apply();
+
+
         sistolica?.setText(sys.toString()).toString()
         diastolica?.setText(dias.toString()).toString()
         ritmoCardiaco?.setText(hr.toString()).toString()
         barra_sis?.setProgress(sys)
         barra_dias?.setProgress(dias)
-
-
-
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+        })
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
     }
 
     override fun onBpResultError() {
         println("Error de mierda")
+
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+        })
+        enMedicion=false
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
     }
 
     override fun onLeakError(p0: Int) {
         println("Otro error de mierda")
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+        })
+        enMedicion=false
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
     }
 
     override fun onLeadError() {
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+        })
+        enMedicion=false
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
     }
 
     override fun onBpError() {
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+        })
+        enMedicion=false
+        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
     }
 }

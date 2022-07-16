@@ -1,5 +1,7 @@
 package com.saludencamino.myapplication
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -35,12 +37,15 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     private var graph: GraphView? = null
     private var series: LineGraphSeries<DataPoint>? = null
     private var tiempo = 0.0;
-
+    private var prefs: SharedPreferences? = null
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        prefs = getSharedPreferences(
+            "com.saludencamino.myapplication", Context.MODE_PRIVATE
+        )
         setContentView(R.layout.activity_ecg2)
         botonMedicion=findViewById(R.id.botonMedicionGlucosa)
         ritmoCardiaco= findViewById(R.id.ritmoCardiaco)
@@ -130,6 +135,13 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onEcgResult(rrMax: Int, rrMin: Int, hrv: Int) {
+
+        prefs?.edit()?.putInt("rrmax",rrMax)?.apply();
+        prefs?.edit()?.putInt("rrmin",rrMin)?.apply();
+        prefs?.edit()?.putInt("hrv",hrv)?.apply();
+
+
+
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             this.rpiMax?.setText(rrMax.toString()).toString()
             this.rpiMin?.setText(rrMin.toString()).toString()
@@ -187,21 +199,29 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             when(key){
                 0 ->{ //RRI MAX
                     this.rpiMax?.setText(value.toString()).toString()
+                    prefs?.edit()?.putInt("rrmax",value)?.apply();
+
+
                 }
                 1 ->{ //RRI MIN
                     this.rpiMin?.setText(value.toString()).toString()
+                    prefs?.edit()?.putInt("rrmin",value)?.apply();
+
                 }
                 2 ->{ //HR
                     this.ritmoCardiaco?.setText(value.toString()).toString()
+                    prefs?.edit()?.putInt("hr",value)?.apply();
                 }
                 3 ->{ //HRV
                     this.hrv?.setText(value.toString()).toString()
+                    prefs?.edit()?.putInt("hrv",value)?.apply();
                 }
                 4 ->{ //MOOD
 
                 }
                 5 ->{ //RR
                     respiracion?.setText(value.toString()).toString()
+                    prefs?.edit()?.putInt("rr",value)?.apply();
                 }
             }
         })
