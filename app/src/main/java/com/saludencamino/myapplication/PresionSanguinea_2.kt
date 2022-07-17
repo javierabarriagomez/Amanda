@@ -120,7 +120,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onBpResultError() {
-        println("Error de mierda")
+
 
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()

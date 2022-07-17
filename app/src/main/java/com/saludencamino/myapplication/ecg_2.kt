@@ -119,6 +119,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onHeartRate(p0: Int) {
+        prefs?.edit()?.putInt("hr",p0)?.apply();
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             ritmoCardiaco?.setText(p0.toString()).toString()
         })
@@ -126,6 +127,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onRespiratoryRate(p0: Int) {
+        prefs?.edit()?.putInt("rr",p0)?.apply();
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             respiracion?.setText(p0.toString()).toString()
         })

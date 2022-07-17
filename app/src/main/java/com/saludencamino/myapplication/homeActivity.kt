@@ -25,6 +25,8 @@ import com.mintti.visionsdk.ble.BleDevice
 import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.callback.IBleConnectionListener
 import com.mintti.visionsdk.ble.callback.IBleScanCallback
+import org.json.JSONObject
+import java.util.*
 
 
 class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback, MonitorDataTransmissionManager.OnServiceBindListener,OnBleConnectListener{
@@ -39,7 +41,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
 
 
+    override fun onBackPressed() {
 
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //绑定服务，
@@ -113,20 +117,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                         botonConectar?.text = "Conectar"
                         BleManager.getInstance().stopScan();
                     }
-
-
                 }
                 .show()
         }
-
-
-
-
-
-
-
-
-
     }
     private fun requestPermission() {
         if (ContextCompat.checkSelfPermission(
@@ -325,10 +318,76 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         val prefs = getSharedPreferences(
             "com.saludencamino.myapplication", Context.MODE_PRIVATE
         )
+        //Temperatura
+        val temperatura = prefs.getFloat("temperatura", -1F)
+        val tempObj = JSONObject();
+        tempObj.put("temperatura",temperatura);
+        tempObj.put("horarioMedicion",Date());
 
-        val restoredText = prefs.getFloat("temperatura", 0F)
 
-        println(restoredText);
+        //Saturacion
+        val spo2 = prefs.getFloat("saturacion_spo2",-1F)
+        val hr1 = prefs.getInt("saturacion_corazon",-1)
+
+        val satObj = JSONObject()
+        satObj.put("saturacion",spo2)
+        satObj.put("ritmoCardiaco",hr1)
+        satObj.put("horarioMedicion",Date());
+        //glucosa
+        val glucosa = prefs.getFloat("glucosa",-1F)
+
+        val glucObj = JSONObject()
+        glucObj.put("mgd",glucosa)
+        glucObj.put("diabetes",null)
+        glucObj.put("ayuna",null)
+        glucObj.put("horarioMedicion",Date());
+
+        //presion
+        val sis = prefs.getInt("presion_sistolica",-1)
+        val dias = prefs.getInt("presion_diastolica",-1)
+        val hr2 = prefs.getInt("presion_ritmo",-1)
+
+        val presTemp = JSONObject();
+        presTemp.put("SBP",sis)
+        presTemp.put("DBP",dias)
+        presTemp.put("ritmoCardiaco",hr2)
+        presTemp.put("horarioMedicion",Date());
+
+
+        //ecg
+        val rrmin = prefs.getInt("rrmin",-1)
+        val rrmax = prefs.getInt("rrmax",-1)
+        val hrv = prefs.getInt("hrv",-1)
+        val rr = prefs.getInt("rr",-1)
+        val hr3 = prefs.getInt("hr",-1)
+
+        val ecgObj = JSONObject();
+
+        ecgObj.put("RRmax",rrmax)
+        ecgObj.put("RRmin",rrmin)
+        ecgObj.put("ritmoCardiaco",hr3)
+        ecgObj.put("HRV",hrv)
+        ecgObj.put("respirationRate",rr)
+
+
+
+
+
+
+        val body = JSONObject();
+        body.put("medicionTemperatura",tempObj)
+        body.put("medicionPresion",presTemp)
+        body.put("medicionOxigenacion",satObj)
+        body.put("medicionGlucosa",glucObj)
+        body.put("medicionElectro",ecgObj)
+        body.put("idUsuario",0)
+
+
+
+        println(body.toString())
+
+
+
     }
     override fun onUpdateDialogBleList() {
         println("Hola")
