@@ -107,6 +107,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onDrawWave(p0: Int) {
+        println(p0);
 
         //
         //series?.appendData(DataPoint(tiempo,p0.toDouble()),true,40,true)
@@ -141,6 +142,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         prefs?.edit()?.putInt("rrmax",rrMax)?.apply();
         prefs?.edit()?.putInt("rrmin",rrMin)?.apply();
         prefs?.edit()?.putInt("hrv",hrv)?.apply();
+        prefs?.edit()?.putBoolean("DatosCapturados",true)?.apply();
 
 
 
@@ -187,7 +189,16 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onDrawWave(p0: Any?) {
-        return
+
+        var data = p0 as Int
+        //
+        //series?.appendData(DataPoint(tiempo,p0.toDouble()),true,40,true)
+        this@ecg_2.runOnUiThread(java.lang.Runnable {
+            tiempo+=0.001
+            series?.appendData(DataPoint(tiempo,data.toDouble()),true,40,true)
+        })
+
+
     }
 
 
@@ -198,11 +209,13 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun onECGValues(key: Int, value: Int) {
         this@ecg_2.runOnUiThread(java.lang.Runnable {
 
+                graph?.onDataChanged(false,true)
+
+            prefs?.edit()?.putBoolean("DatosCapturados",true)?.apply();
             when(key){
                 0 ->{ //RRI MAX
                     this.rpiMax?.setText(value.toString()).toString()
                     prefs?.edit()?.putInt("rrmax",value)?.apply();
-
 
                 }
                 1 ->{ //RRI MIN

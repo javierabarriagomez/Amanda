@@ -116,7 +116,7 @@
             android:text="0.0 °C"
             android:textAlignment="center"
             android:textColor="#9E9E9E"
-            android:textSize="34sp"
+            android:textSize="34dp"
             android:textStyle="normal|bold" />
 
         <TextView
@@ -126,7 +126,7 @@
             android:text="Normal"
             android:textAlignment="center"
             android:textColor="@color/input"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
 
         <Space
             android:layout_width="match_parent"

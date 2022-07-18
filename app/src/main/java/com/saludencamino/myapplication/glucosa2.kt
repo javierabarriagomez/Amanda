@@ -147,7 +147,8 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             val prefs = getSharedPreferences(
                 "com.saludencamino.myapplication", Context.MODE_PRIVATE
             )
-            prefs.edit().putFloat("glucosa",res.toFloat()).apply();
+            prefs.edit().putFloat("glucosa",res.toFloat()).apply()
+            prefs.edit().putBoolean("DatosCapturados",true).apply();
             resultado?.setText(res.toString()).toString()
             resultadoBarra?.setProgress(res.toInt(),true)
             resultadoBarra2?.setProgress(res.toInt(),true)

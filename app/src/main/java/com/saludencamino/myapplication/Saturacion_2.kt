@@ -118,6 +118,8 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             )
             prefs.edit().putFloat("saturacion_spo2",spo2.toFloat()).apply();
             prefs.edit().putInt("saturacion_corazon",corazon).apply();
+            prefs.edit().putBoolean("DatosCapturados",true).apply();
+
             toastFinalizado()
 
             isRunning=false;
@@ -151,6 +153,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         )
         prefs.edit().putInt("saturacion_spo2",spo2).apply();
         prefs.edit().putInt("saturacion_corazon",corazon).apply();
+        prefs.edit().putBoolean("DatosCapturados",true).apply();
         println("Finalizado");
         println(corazon);
         println(spo2);
@@ -178,7 +181,13 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     }
 
     override fun onSpO2Wave(p0: Int) {
+        print(p0);
+        tiempo+=1
 
+        series?.appendData(DataPoint(tiempo,p0.toDouble()),true,10,true)
+        if(tiempo.toInt() % 100 == 0){
+            graph?.onDataChanged(false,true)
+        }
     }
 
     override fun onSpO2End() {

@@ -23,6 +23,7 @@
         android:layout_width="73dp"
         android:layout_height="66dp"
         android:background="#00FFFFFF"
+        android:onClick="logout"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
         android:scaleType="fitStart"
@@ -36,6 +37,7 @@
         android:layout_height="58dp"
         android:onClick="iniciarBusqueda"
         android:text="Conectar"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,16 +64,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="112dp"
                 android:scaleType="fitCenter"
+                android:filter="false"
                 app:srcCompat="@drawable/lorena" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nombreView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_bold"
             android:gravity="center"
-            android:text="Hola Lorena"
+            android:text="Saludos"
             android:textColor="@color/input"
             android:textSize="20dp"
             android:textStyle="bold" />

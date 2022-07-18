@@ -60,13 +60,9 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Porfavor llene todos los campos", Toast.LENGTH_SHORT).show()
             return;
         }
+        Toast.makeText(this, "Iniciando sesión", Toast.LENGTH_SHORT).show()
         val server = Server()
-        if(server.login(textoUsuario?.text.toString(),textoContra?.text.toString())){
-            val prefs = getSharedPreferences(
-                "com.saludencamino.myapplication", Context.MODE_PRIVATE
-            )
-            prefs.edit().putBoolean("sesion_iniciada",true).apply();
-
+        if(server.login(textoUsuario?.text.toString(),textoContra?.text.toString(), this)){
             val intent = Intent(this,homeActivity::class.java)
             startActivity(intent)
         }else{

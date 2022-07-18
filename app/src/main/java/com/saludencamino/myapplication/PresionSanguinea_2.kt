@@ -106,6 +106,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         prefs.edit().putInt("presion_sistolica",sys).apply();
         prefs.edit().putInt("presion_diastolica",dias).apply();
         prefs.edit().putInt("presion_ritmo",hr).apply();
+        prefs.edit().putBoolean("DatosCapturados",true).apply();
 
 
         sistolica?.setText(sys.toString()).toString()

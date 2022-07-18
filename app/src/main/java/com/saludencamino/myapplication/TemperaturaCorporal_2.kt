@@ -49,6 +49,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                     "com.saludencamino.myapplication", Context.MODE_PRIVATE
                 )
                 prefs.edit().putFloat("temperatura",it.toFloat()).apply();
+                prefs.edit().putBoolean("DatosCapturados",true);
                 println(it)
                 resultado?.setText(it.toString() + " °C").toString()
                 progressBar?.progress = it.toInt()
@@ -68,6 +69,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                     "com.saludencamino.myapplication", Context.MODE_PRIVATE
                 )
                 prefs.edit().putFloat("temperatura",it.toFloat()).apply();
+                prefs.edit().putBoolean("DatosCapturados",true).apply();
                 println(it)
                 resultado?.setText(it.toString() + " °C").toString()
                 progressBar?.progress = it.toInt()

@@ -128,7 +128,7 @@
             android:text="ECG"
             android:textAlignment="center"
             android:textColor="@color/input"
-            android:textSize="27sp"
+            android:textSize="27dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -137,6 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
+            android:textSize="14dp"
             android:text="1.- Sostenga el dispositivo con la mano izquierda. Con el pulgar, toque la parte metálica del sensor de oxígeno en sangre mientras los otros dedos tocan el metal en la parte posterior del dispositivo.\n2.- Luego con el índice de la mano derecha toque el sensor de temperatura corporal, las dos manos no se deben tocar.\n3.- Inicie la medición y mantenga la posición de las manos hasta que Amanda lo indique."
             android:textColor="@color/input" />
 

@@ -124,6 +124,7 @@
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="14dp"
             android:text="1.- Ubique el dedo índice sutilmente cubriendo el sensor como se muestra en la imagen.\n2.- Inicie la medición. Se encenderá una luz roja, mantenga el dedo sobre el sensor hasta que la luz roja se apague."
             android:textColor="#73760A" />
 

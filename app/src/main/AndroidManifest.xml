@@ -18,6 +18,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:screenOrientation="portrait"
         android:icon="@mipmap/ic_launcher"
         android:label="Amanda v2.0"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -26,39 +27,51 @@
 
         <activity
             android:name=".ecg_2"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".ecg"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".glucosa2"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".glucosa"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".Saturacion_2"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".TemperaturaCorporal"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".PresionSanguinea_2"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".Saturacion"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".TemperaturaCorporal_2"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".PresionSanguinea"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".homeActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

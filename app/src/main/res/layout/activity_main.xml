@@ -73,7 +73,8 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:singleLine="true"
-        android:textColorHint="@color/input"></EditText>
+        android:textColorHint="@color/input"
+        android:textSize="18dp"></EditText>
 
     <EditText
         android:id="@+id/Password"
@@ -91,7 +92,8 @@
         android:paddingRight="10dp"
         android:password="true"
         android:singleLine="true"
-        android:textColorHint="@color/input"></EditText>
+        android:textColorHint="@color/input"
+        android:textSize="18dp"></EditText>
 
     <Space
         android:id="@+id/spacer2"
