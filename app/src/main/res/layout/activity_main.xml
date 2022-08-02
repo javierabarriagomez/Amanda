@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical">
 
 
     <!--<TextView
@@ -58,62 +59,72 @@
         android:id="@+id/spacer3"
         android:layout_marginBottom="30dp"></Space>
 
-    <EditText
-        android:id="@+id/Username"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spacer3"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:backgroundTint="@color/input"
-        android:drawableLeft="@drawable/ic_baseline_person_outline_24"
-        android:drawableTint="@color/input"
-        android:fontFamily="@font/montserrat_bold"
-        android:hint="Ingrese nombre de usuario"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:singleLine="true"
-        android:textColorHint="@color/input"
-        android:textSize="18dp"></EditText>
+        android:layout_alignTop="@+id/spacer3"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="vertical"
+        android:paddingBottom="0dp">
 
-    <EditText
-        android:id="@+id/Password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/Username"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:backgroundTint="@color/input"
-        android:drawableLeft="@drawable/ic_baseline_lock_open_24"
-        android:drawableTint="@color/input"
-        android:fontFamily="@font/montserrat_bold"
-        android:hint="Ingrese contraseña"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:password="true"
-        android:singleLine="true"
-        android:textColorHint="@color/input"
-        android:textSize="18dp"></EditText>
+        <EditText
+            android:id="@+id/Username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spacer3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/input"
+            android:drawableLeft="@drawable/ic_baseline_person_outline_24"
+            android:drawableTint="@color/input"
+            android:fontFamily="@font/montserrat_bold"
+            android:hint="Ingrese nombre de usuario"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColorHint="@color/input"
+            android:textSize="18dp"></EditText>
 
-    <Space
-        android:id="@+id/spacer2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/Password"
-        android:layout_margin="10dp"></Space>
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Username"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/input"
+            android:drawableLeft="@drawable/ic_baseline_lock_open_24"
+            android:drawableTint="@color/input"
+            android:fontFamily="@font/montserrat_bold"
+            android:hint="Ingrese contraseña"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:password="true"
+            android:singleLine="true"
+            android:textColorHint="@color/input"
+            android:textSize="18dp"></EditText>
 
-    <ImageButton
-        android:id="@+id/botonLogin"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/spacer2"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#00FFFFFF"
-        android:hapticFeedbackEnabled="true"
-        android:onClick="login"
-        android:scaleType="fitCenter"
-        android:src="@drawable/button"></ImageButton>
+        <Space
+            android:id="@+id/spacer2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Password"
+            android:layout_margin="10dp"></Space>
+
+        <ImageButton
+            android:id="@+id/botonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/spacer2"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#00FFFFFF"
+            android:hapticFeedbackEnabled="true"
+            android:onClick="login"
+            android:scaleType="fitCenter"
+            android:src="@drawable/button"></ImageButton>
+    </LinearLayout>
 
 
 </RelativeLayout>

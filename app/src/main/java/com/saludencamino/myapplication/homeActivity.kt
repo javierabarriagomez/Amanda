@@ -110,12 +110,22 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     }
 
     fun iniciarBusqueda(view: View){
+        if(isScanning == true && oldBleDevice == null && mBleDevice == null){
+            isScanning = false
+            botonConectar?.text ="Conectar"
+            BleManager.getInstance().stopScan()
+            MonitorDataTransmissionManager.getInstance().scan(false);
+            return
+        }
 
         if(oldBleDevice != null || mBleDevice !=null){
             if(oldBleDevice != null){
                 MonitorDataTransmissionManager.getInstance().disConnectBle()
                 botonConectar?.text ="Conectar"
-                Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                })
+
                 (this.application as App).version = 0
                 oldBleDevice = null
             }
@@ -242,11 +252,15 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         println("LALAS")
     }
 
-    override fun onServiceUnbind() {}
+    override fun onServiceUnbind() {
+        println("LALOS")
+    }
 
 
     fun mensajeSinConexion(){
-        Toast.makeText(this, "Debe conectar el dispositivo primero", Toast.LENGTH_SHORT).show()
+        this@homeActivity.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Debe conectar el dispositivo primero", Toast.LENGTH_SHORT).show()
+        })
     }
 
 
@@ -321,7 +335,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onConnectSuccess(p0: String?) {
         BleManager.getInstance().stopScan()
         botonConectar?.text = "Desconectar"
-        Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_SHORT).show()
+        this@homeActivity.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_SHORT).show()
+        })
         isScanning=false
         (this.application as App).version = 2
     }
@@ -329,15 +345,20 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onConnectFailed(p0: String?, p1: Int) {
         BleManager.getInstance().stopScan()
         mBleDevice=null
-        Toast.makeText(this, "Error al conectar intente nuevamente", Toast.LENGTH_SHORT).show()
+        this@homeActivity.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Error al conectar intente nuevamente", Toast.LENGTH_SHORT).show()
+        })
 
     }
 
     override fun onDisconnected(p0: String?, p1: Boolean, p2: Int) {
         botonConectar?.text ="Conectar"
-        Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+        this@homeActivity.runOnUiThread(java.lang.Runnable {
+            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+        })
         (this.application as App).version = 0
         mBleDevice = null
+        isScanning=false
     }
 
     override fun onServicesDiscovered(p0: String?, p1: MutableList<BluetoothGattService>?) {
@@ -361,9 +382,20 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         println(p0)
         if(p0 == 101){
             botonConectar?.text ="Conectar"
-            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+
+            if(oldBleDevice ==null){
+                this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    Toast.makeText(this, "No se encontro dispositivo", Toast.LENGTH_SHORT).show()
+                })
+            }else{
+                this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                })
+            }
+
             (this.application as App).version = 0
             oldBleDevice = null
+            isScanning = false
         }
         if(p0 == 104){
             oldBleDevice = MonitorDataTransmissionManager.getInstance().bluetoothDevice
@@ -385,8 +417,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         //Hay Datos?
 
         if(!prefs.getBoolean("DatosCapturados",false)){
-
-                Toast.makeText(this,"No hay datos para enviar",Toast.LENGTH_SHORT).show()
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "No hay datos para enviar", Toast.LENGTH_SHORT).show()
+            })
 
 
             return;
@@ -508,7 +541,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
         val userId = prefs.getLong("idUsuario",-1)
         if(userId == -1L){
-            Toast.makeText(this,"Error interno!",Toast.LENGTH_SHORT).show()
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "Error interno!", Toast.LENGTH_SHORT).show()
+            })
             return;
         }
         val body = JSONObject();
@@ -524,7 +559,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         println(body.toString())
         val server = Server();
         if(server.saveData(this,body)){
-           Toast.makeText(this,"datos subidos correctamente",Toast.LENGTH_SHORT).show();
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "datos subidos correctamente", Toast.LENGTH_SHORT).show();
+            })
 
            prefs.edit().remove("DatosCapturados").commit()
            prefs.edit().remove("temperatura").commit();
@@ -540,7 +577,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
            prefs.edit().remove("rr").commit();
            prefs.edit().remove("hr").commit();
        }else{
-           Toast.makeText(this,"Error interno",Toast.LENGTH_SHORT).show();
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "Error interno", Toast.LENGTH_SHORT).show();
+            })
        }
     }
     override fun onUpdateDialogBleList() {
