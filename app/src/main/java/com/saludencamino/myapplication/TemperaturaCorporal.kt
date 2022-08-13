@@ -17,4 +17,8 @@ class TemperaturaCorporal : AppCompatActivity() {
         startActivity(intent)
 
     }
+
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
 }

@@ -201,6 +201,10 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
     }
 
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
+
 
     override fun onSignalQuality(p0: Int) {
         return

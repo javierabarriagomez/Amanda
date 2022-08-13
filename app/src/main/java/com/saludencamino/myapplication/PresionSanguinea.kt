@@ -11,6 +11,9 @@ class PresionSanguinea : AppCompatActivity() {
         setContentView(R.layout.activity_presion_sanguinea)
     }
 
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
 
     fun comenzarMedicion(view: View){
         val intent = Intent(this,PresionSanguinea_2::class.java)

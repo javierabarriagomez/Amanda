@@ -49,6 +49,7 @@
             android:id="@+id/imageButton14"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:onClick="goBack"
             android:adjustViewBounds="true"
             android:background="#00FFFFFF"
             android:scaleType="fitCenter"
@@ -141,7 +142,7 @@
             android:background="#FFFFFF"
             android:onClick="comenzarMedicion"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/iniciar_medicion" />
+            app:srcCompat="@drawable/button_contimuar" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

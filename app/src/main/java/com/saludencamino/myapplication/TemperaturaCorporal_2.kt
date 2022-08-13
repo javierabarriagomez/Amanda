@@ -35,6 +35,10 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
         progressOverlay?.visibility = View.GONE;
 
     }
+
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
     fun tomarMedicion(view: View){
         println("Empezando medicion")
 

@@ -28,6 +28,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     private var barra_sis: ProgressBar? = null
     private var barra_dias: ProgressBar? = null
     private var enMedicion:Boolean = false
+    private var progressOverlay: View? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +41,21 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         botonMedicion = findViewById(R.id.imageButton5)
         barra_sis = findViewById(R.id.progressBar2)
         barra_dias = findViewById(R.id.progressBar3)
+        progressOverlay = findViewById(R.id.progress_overlay)
 
 
     }
 
+    fun ocultarOverlay(){
+        progressOverlay?.visibility = View.GONE;
+
+    }
+
+
 
     fun tomarMedicion(view: View){
         println("Empezando medicion")
-
+        progressOverlay?.visibility = View.VISIBLE;
         if(!enMedicion){
 
             if((this.application as App).version != 1){
@@ -69,6 +77,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
                 MonitorDataTransmissionManager.getInstance().stopMeasure()
             }
             enMedicion=false;
+            ocultarOverlay()
             this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
                 Toast.makeText(this, "Se detuvo la medición", Toast.LENGTH_SHORT).show()
             })
@@ -93,7 +102,12 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         return true
     }
 
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
+
     override fun onBpResult(sys: Int, dias: Int, hr: Int) {
+        ocultarOverlay()
         if((this.application as App).version != 1) {
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         }else{
@@ -122,7 +136,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
 
     override fun onBpResultError() {
 
-
+        ocultarOverlay()
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
         })
@@ -131,6 +145,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onLeakError(p0: Int) {
+        ocultarOverlay()
         println("Otro error de mierda")
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
@@ -140,6 +155,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onLeadError() {
+        ocultarOverlay()
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
@@ -150,6 +166,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onBpError() {
+        ocultarOverlay()
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {

@@ -16,4 +16,8 @@ class Saturacion : AppCompatActivity() {
         startActivity(intent)
 
     }
+
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
 }

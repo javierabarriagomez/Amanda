@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.linktop.MonitorDataTransmissionManager
 import com.linktop.constant.BgPagerCaliCode
 import com.linktop.infs.OnBgResultListener
@@ -44,6 +45,10 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
         mensaje= findViewById(R.id.mensaje)
         botonMedicionGlucosa = findViewById(R.id.botonMedicionGlucosa)
+    }
+
+    fun goBack(view: View){
+        super.onBackPressed()
     }
 
     fun iniciarMedicion(view: View){

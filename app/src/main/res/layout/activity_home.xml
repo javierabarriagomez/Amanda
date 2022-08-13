@@ -31,13 +31,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/menu" />
 
-    <Button
+    <ImageButton
         android:id="@+id/botonConectar"
         android:layout_width="116dp"
         android:layout_height="58dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
         android:onClick="iniciarBusqueda"
-        android:text="Conectar"
-        android:textSize="12dp"
+        app:srcCompat="@drawable/conectar"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

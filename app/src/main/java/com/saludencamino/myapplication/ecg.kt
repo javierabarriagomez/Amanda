@@ -14,4 +14,8 @@ class ecg : AppCompatActivity() {
         val intent = Intent(this,ecg_2::class.java)
         startActivity(intent)
     }
+
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
 }

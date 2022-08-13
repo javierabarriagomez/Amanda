@@ -144,6 +144,10 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         return true
     }
 
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
+
 
     //Version 1.0
 
@@ -151,7 +155,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         val prefs = getSharedPreferences(
             "com.saludencamino.myapplication", Context.MODE_PRIVATE
         )
-        prefs.edit().putInt("saturacion_spo2",spo2).apply();
+        prefs.edit().putFloat("saturacion_spo2",spo2.toFloat()).apply();
         prefs.edit().putInt("saturacion_corazon",corazon).apply();
         prefs.edit().putBoolean("DatosCapturados",true).apply();
         println("Finalizado");
@@ -184,8 +188,8 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         print(p0);
         tiempo+=1
 
-        series?.appendData(DataPoint(tiempo,p0.toDouble()),true,10,true)
-        if(tiempo.toInt() % 100 == 0){
+        series?.appendData(DataPoint(tiempo,p0.toDouble()),true,8,true)
+        if(tiempo.toInt() % 120 == 0){
             graph?.onDataChanged(false,true)
         }
     }

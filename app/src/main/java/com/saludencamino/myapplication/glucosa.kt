@@ -14,4 +14,8 @@ class glucosa : AppCompatActivity() {
         val intent = Intent(this,glucosa2::class.java)
         startActivity(intent)
     }
+
+    fun goBack(view: View){
+        super.onBackPressed()
+    }
 }

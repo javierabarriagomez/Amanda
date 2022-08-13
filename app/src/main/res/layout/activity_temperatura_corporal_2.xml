@@ -179,6 +179,7 @@
             android:layout_height="80dp"
             android:adjustViewBounds="true"
             android:background="#00FFFFFF"
+            android:onClick="goBack"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/floating" />
 

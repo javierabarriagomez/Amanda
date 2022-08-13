@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14dp"
-            android:text="1.- Ubique el dedo índice sutilmente cubriendo el sensor como se muestra en la imagen.\n2.- Inicie la medición. Se encenderá una luz roja, mantenga el dedo sobre el sensor hasta que la luz roja se apague."
+            android:text="1.- Ubique el dispositivo a 5 cm de la frente. como se puede observar en la imagen y luego presione iniciar medición."
             android:textColor="@color/input" />
 
         <ImageView
@@ -126,7 +126,7 @@
             android:background="#0000"
             android:onClick="comenzarMedicion"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/iniciar_medicion" />
+            app:srcCompat="@drawable/button_contimuar" />
 
     </LinearLayout>
 
@@ -143,6 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:adjustViewBounds="true"
+            android:onClick="goBack"
             android:background="#00FFFFFF"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/floating" />

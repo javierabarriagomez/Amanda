@@ -1,24 +1,18 @@
 package com.saludencamino.myapplication
 
 import android.Manifest
-import android.R.attr
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
 
-import android.util.Base64
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,10 +28,13 @@ import com.mintti.visionsdk.ble.callback.IBleScanCallback
 import org.json.JSONObject
 
 import java.util.*
-import android.R.attr.bitmap
 
-import android.graphics.drawable.BitmapDrawable
+import android.widget.*
 import java.text.SimpleDateFormat
+import android.bluetooth.BluetoothAdapter
+
+
+
 
 
 class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback, MonitorDataTransmissionManager.OnServiceBindListener,OnBleConnectListener{
@@ -47,18 +44,33 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     private var oldBleDevice: BluetoothDevice? = null
     private var isScanning: Boolean = false;
     private var mHandler: Handler? = null;
-    private var botonConectar: Button? = null;
+    private var botonConectar: ImageButton? = null;
     private var nombreTextView: TextView? = null;
     private var imageView: ImageView? = null;
     protected var mHcService: HcService? = null
 
-
-
-
     override fun onBackPressed() {
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        actualizarGui()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (mBluetoothAdapter == null) {
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                android.widget.Toast.makeText(this, "Su dispositivo no soporta bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
+            })
+        } else if (!mBluetoothAdapter.isEnabled) {
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                android.widget.Toast.makeText(this, "Debe habilitar el bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
+            })
+        } else {
+            // Bluetooth is enabled
+        }
         //绑定服务，
         // 类型是 HealthMonitor（HealthMonitor健康检测仪），
         MonitorDataTransmissionManager.getInstance().bind(
@@ -76,8 +88,6 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         var mBleDevManager = BleDevManager()
         mBleDevManager.initHC(this)
 
-
-
         setContentView(R.layout.activity_home)
         botonConectar = findViewById(R.id.botonConectar)
         nombreTextView = findViewById(R.id.nombreView)
@@ -91,8 +101,6 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
         nombreTextView?.text="Hola $nombreUsuario"
 
-
-
         /*var foto = prefs.getString("FotoUsuario","NAN")
         if(foto != "NAN"){
             foto = foto?.substring(foto.indexOf(",")+1)
@@ -103,74 +111,125 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
             imageView?.setImageBitmap(image)
         }*/
-
-
-
+        actualizarGui()
 
     }
 
     fun iniciarBusqueda(view: View){
-        if(isScanning == true && oldBleDevice == null && mBleDevice == null){
-            isScanning = false
-            botonConectar?.text ="Conectar"
-            BleManager.getInstance().stopScan()
-            MonitorDataTransmissionManager.getInstance().scan(false);
-            return
-        }
+        if(ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+                ){
 
-        if(oldBleDevice != null || mBleDevice !=null){
-            if(oldBleDevice != null){
-                MonitorDataTransmissionManager.getInstance().disConnectBle()
-                botonConectar?.text ="Conectar"
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+            if(ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED)
+                {
+                    this@homeActivity.runOnUiThread(java.lang.Runnable {
+                        android.widget.Toast.makeText(this, "Debe habilitar la busqueda de dispositivos", android.widget.Toast.LENGTH_SHORT).show()
+                    })
+                }
+
+
+
+        }else {
+            val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            if (mBluetoothAdapter == null) {
                 this@homeActivity.runOnUiThread(java.lang.Runnable {
-                    Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(this, "Su dispositivo no soporta bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
                 })
-
-                (this.application as App).version = 0
-                oldBleDevice = null
-            }
-            if(mBleDevice !=null){
-                BleManager.getInstance().stopScan()
-                BleManager.getInstance().disconnect()
-            }
-        }else{
+            } else if (!mBluetoothAdapter.isEnabled) {
+                this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    android.widget.Toast.makeText(this, "Debe habilitar el bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
+                })
+            } else {
+                // Bluetooth is enabled
 
 
+                if (isScanning == true && oldBleDevice == null && mBleDevice == null) {
+                    isScanning = false
+                    botonConectar?.setImageResource(R.drawable.conectar)
+                    BleManager.getInstance().stopScan()
+                    MonitorDataTransmissionManager.getInstance().scan(false);
+                    return
+                }
 
-            AlertDialog.Builder(this)
-                .setTitle("Version de Amanda")
-                .setMessage("Seleccione su versión de Amanada")
-                .setNegativeButton("1.0") { dialog, which ->
+                if (oldBleDevice != null || mBleDevice != null) {
+                    if (oldBleDevice != null) {
+                        MonitorDataTransmissionManager.getInstance().disConnectBle()
+                        botonConectar?.setImageResource(R.drawable.conectar)
+                        this@homeActivity.runOnUiThread(java.lang.Runnable {
+                            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                        })
 
-                    if(!isScanning){
-                        botonConectar?.text = "Dejar de buscar"
-                        isScanning=true
+                        (this.application as App).version = 0
+                        oldBleDevice = null
+                    }
+                    if (mBleDevice != null) {
+                        BleManager.getInstance().stopScan()
+                        BleManager.getInstance().disconnect()
+                    }
+                } else {
+                    if (!isScanning) {
+                        botonConectar?.setImageResource(R.drawable.buscando)
+                        isScanning = true
                         MonitorDataTransmissionManager.getInstance().scan(true);
-                        MonitorDataTransmissionManager.getInstance().setOnBleConnectListener(this)
-
-                    }else{
-                        isScanning=false
-                        botonConectar?.text = "Conectar"
-                        MonitorDataTransmissionManager.getInstance().scan(false);
-
-                    }
-
-                }
-                .setPositiveButton(
-                    "2.0"
-                ) { dialog, which ->
-
-                    if(!isScanning){
-                        botonConectar?.text = "Dejar de buscar"
-                        isScanning=true
+                        MonitorDataTransmissionManager.getInstance()
+                            .setOnBleConnectListener(this)
                         startScan();
-                    }else{
-                        isScanning=false
-                        botonConectar?.text = "Conectar"
+
+                    } else {
+                        isScanning = false
+                        botonConectar?.setImageResource(R.drawable.conectar)
+                        MonitorDataTransmissionManager.getInstance().scan(false);
                         BleManager.getInstance().stopScan();
+
                     }
+
+                    /*AlertDialog.Builder(this)
+                        .setTitle("Version de Amanda")
+                        .setMessage("Seleccione su versión de Amanda")
+                        .setNegativeButton("1.0") { dialog, which ->
+
+                            if (!isScanning) {
+                                botonConectar?.setImageResource(R.drawable.buscando)
+                                isScanning = true
+                                MonitorDataTransmissionManager.getInstance().scan(true);
+                                MonitorDataTransmissionManager.getInstance()
+                                    .setOnBleConnectListener(this)
+
+                            } else {
+                                isScanning = false
+                                botonConectar?.setImageResource(R.drawable.conectar)
+                                MonitorDataTransmissionManager.getInstance().scan(false);
+
+                            }
+
+                        }
+                        .setPositiveButton(
+                            "2.0"
+                        ) { dialog, which ->
+
+                            if (!isScanning) {
+                                botonConectar?.setImageResource(R.drawable.buscando)
+                                isScanning = true
+                                startScan();
+                            } else {
+                                isScanning = false
+                                botonConectar?.setImageResource(R.drawable.desconectar)
+                                BleManager.getInstance().stopScan();
+                            }
+                        }
+                        .show()*/
                 }
-                .show()
+            }
         }
     }
     private fun requestPermission() {
@@ -184,6 +243,61 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1
             )
+
+        }
+
+
+    }
+
+    fun actualizarGui(){
+        val prefs = getSharedPreferences(
+            "com.saludencamino.myapplication", Context.MODE_PRIVATE
+        )
+
+        //Revisar estados!
+        if(prefs.getBoolean("DatosCapturados",false)){
+            //temperatura
+            val temperatura = prefs.getFloat("temperatura", -1F)
+            if(temperatura != -1F) {
+                findViewById<ImageButton>(R.id.imageButton8)?.setImageResource(R.drawable.temperatura_listo)
+            }else{
+                findViewById<ImageButton>(R.id.imageButton8)?.setImageResource(R.drawable.temperatura)
+            }
+
+            //Saturacion
+            val spo2 = prefs.getFloat("saturacion_spo2",-1F)
+            if(spo2 != -1F){
+                findViewById<ImageButton>(R.id.imageButton9)?.setImageResource(R.drawable.saturacion_listo)
+            }else{
+                findViewById<ImageButton>(R.id.imageButton9)?.setImageResource(R.drawable.sangre2)
+            }
+            //Glucosa
+            val glucosa = prefs.getFloat("glucosa",-1F)
+            if(glucosa != -1F){
+                findViewById<ImageButton>(R.id.imageButton10)?.setImageResource(R.drawable.glucosa_listo)
+            }else{
+                findViewById<ImageButton>(R.id.imageButton10)?.setImageResource(R.drawable.glucosa)
+            }
+            //Presion
+            val sis = prefs.getInt("presion_sistolica",-1)
+            val dias = prefs.getInt("presion_diastolica",-1)
+
+            if(sis != -1 || dias != -1){
+                findViewById<ImageButton>(R.id.imageButton7)?.setImageResource(R.drawable.presion_listo)
+            }else{
+                findViewById<ImageButton>(R.id.imageButton7)?.setImageResource(R.drawable.presion)
+            }
+
+            //ECG
+            val rrmin = prefs.getInt("rrmin",-1)
+            val rrmax = prefs.getInt("rrmax",-1)
+            if(rrmin != -1 || rrmax != -1){
+                findViewById<ImageButton>(R.id.imageButton11)?.setImageResource(R.drawable.ecg_listo)
+            }else{
+                findViewById<ImageButton>(R.id.imageButton11)?.setImageResource(R.drawable.ecg)
+            }
+
+
         }
     }
     private fun startOldScan() {
@@ -334,7 +448,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
     override fun onConnectSuccess(p0: String?) {
         BleManager.getInstance().stopScan()
-        botonConectar?.text = "Desconectar"
+        botonConectar?.setImageResource(R.drawable.desconectar)
         this@homeActivity.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_SHORT).show()
         })
@@ -352,7 +466,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     }
 
     override fun onDisconnected(p0: String?, p1: Boolean, p2: Int) {
-        botonConectar?.text ="Conectar"
+        botonConectar?.setImageResource(R.drawable.conectar)
         this@homeActivity.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
         })
@@ -381,7 +495,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onBleState(p0: Int) {
         println(p0)
         if(p0 == 101){
-            botonConectar?.text ="Conectar"
+            botonConectar?.setImageResource(R.drawable.conectar)
 
             if(oldBleDevice ==null){
                 this@homeActivity.runOnUiThread(java.lang.Runnable {
@@ -400,7 +514,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         if(p0 == 104){
             oldBleDevice = MonitorDataTransmissionManager.getInstance().bluetoothDevice
             MonitorDataTransmissionManager.getInstance().scan(false)
-            botonConectar?.text = "Desconectar"
+            botonConectar?.setImageResource(R.drawable.desconectar)
             isScanning=false
             (this.application as App).version = 1
 
@@ -576,6 +690,11 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
            prefs.edit().remove("hrv").commit();
            prefs.edit().remove("rr").commit();
            prefs.edit().remove("hr").commit();
+            findViewById<ImageButton>(R.id.imageButton8)?.setImageResource(R.drawable.temperatura)
+            findViewById<ImageButton>(R.id.imageButton9)?.setImageResource(R.drawable.sangre2)
+            findViewById<ImageButton>(R.id.imageButton10)?.setImageResource(R.drawable.glucosa)
+            findViewById<ImageButton>(R.id.imageButton7)?.setImageResource(R.drawable.presion)
+            findViewById<ImageButton>(R.id.imageButton11)?.setImageResource(R.drawable.ecg)
        }else{
             this@homeActivity.runOnUiThread(java.lang.Runnable {
                 Toast.makeText(this, "Error interno", Toast.LENGTH_SHORT).show();

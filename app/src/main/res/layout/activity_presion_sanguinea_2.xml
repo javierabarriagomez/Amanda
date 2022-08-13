@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:adjustViewBounds="true"
+            android:onClick="goBack"
             android:background="#00FFFFFF"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/floating" />
@@ -281,4 +282,5 @@
             app:srcCompat="@drawable/iniciar_medicion" />
 
     </LinearLayout>
+    <include layout="@layout/loadingspinner"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

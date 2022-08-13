@@ -1,5 +1,6 @@
 package com.saludencamino.myapplication
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
