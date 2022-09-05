@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/layout/activity_ecg2.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/activity_glucosa.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/activity_glucosa2.xml" value="0.2953125" />
-        <entry key="app/src/main/res/layout/activity_home.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_presion_sanguinea.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_presion_sanguinea2.xml" value="0.2625" />
@@ -28,6 +28,7 @@
         <entry key="app/src/main/res/layout/main_item_3.xml" value="0.1816123188405797" />
         <entry key="app/src/main/res/layout/main_item_4.xml" value="0.1816123188405797" />
         <entry key="app/src/main/res/xml/file_path.xml" value="0.19010416666666666" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.14824024483550116" />
       </map>
     </option>
   </component>

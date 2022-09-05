@@ -12,10 +12,13 @@ import com.github.kittinunf.result.Result
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import android.content.SharedPreferences
+import com.beust.klaxon.*
+
+private val klaxon = Klaxon()
 
 class Server {
-    var url = "https://apiamanda.nevape.cl/api"
-
+    //var url = "https://apiamanda.nevape.cl/api" Nevape
+    var url = "http://desarrollo.saludencamino.com:3211/api"
     fun login(user: String,password: String,context: Context):Boolean {
         println("Antes")
         val body = JSONObject();
@@ -26,8 +29,13 @@ class Server {
             val (request, response, result) = Fuel.post("$url/usuario/login").jsonBody(body.toString()).awaitStringResponseResult()
             result.fold(
                 { data ->
-                    println(data);
+
+
+                    if(klaxon.toJsonString(data).contains("login fallido")){
+                        return@fold false
+                    }
                     val usuario = Usuario.fromJson(data);
+
                     if (usuario != null) {
                         println(usuario.data.idUsuario)
                         println(usuario.data.nombre)

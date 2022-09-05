@@ -22,6 +22,16 @@ import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.MeasureType
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 import com.mintti.visionsdk.ble.callback.IEcgResultListener
+import com.saludencamino.myapplication.view.PPGDrawWave
+import com.saludencamino.myapplication.view.WaveSurfaceView
+import com.saludencamino.myapplication.view.WaveView
+import java.sql.Time
+import java.util.TimerTask
+
+import java.util.Timer
+
+
+
 
 class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handler.Callback,
     ISmctAlgoCallback,OnEcgResultListener{
@@ -34,10 +44,14 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     private var duracion: TextView? = null
     private var hrv: TextView? = null
     private var respiracion: TextView? =null
-    private var graph: GraphView? = null
-    private var series: LineGraphSeries<DataPoint>? = null
+    //private var graph: GraphView? = null
+    //private var series: LineGraphSeries<DataPoint>? = null
+    private var graph: WaveSurfaceView? = null
+    private var oxWave: PPGDrawWave? = null
     private var tiempo = 0.0;
     private var prefs: SharedPreferences? = null
+    private var tiempoTimer = 0;
+    private var timer: Timer? = null;
 
 
 
@@ -54,12 +68,13 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         duracion=findViewById(R.id.duracion)
         hrv=findViewById(R.id.hrv)
         respiracion=findViewById(R.id.respiracion)
-        graph = findViewById(R.id.graph)
-        series = LineGraphSeries()
+        oxWave = PPGDrawWave()
+        graph = findViewById(R.id.bo_wave_view)
+
+        graph?.setDrawWave(oxWave)
+
         tiempo = 0.0
-        graph?.viewport?.isYAxisBoundsManual= true
-        graph?.viewport?.setMaxY(100.0);
-        graph?.viewport?.setMinY(-100.0);
+        tiempoTimer = 0
 
     }
 
@@ -74,18 +89,36 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             }else{
                 MonitorDataTransmissionManager.getInstance().setOnEcgResultListener(this)
                 MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.ECG)
+
+                this.timer = Timer()
+                this.timer!!.scheduleAtFixedRate(
+                    object : TimerTask() {
+                        override fun run() {
+                            tiempoTimer ++;
+                            this@ecg_2.runOnUiThread(java.lang.Runnable {
+                                duracion?.text =tiempoTimer.toString();
+
+                            })
+                        }
+                    },
+                    0,
+                    1000
+                )
             }
 
-            series = LineGraphSeries();
-            graph?.removeAllSeries()
-            tiempo = 0.0
 
-            graph?.addSeries(series)
+            oxWave?.clear()
+            tiempo = 0.0
+            tiempoTimer=0;
+            duracion?.text ="0";
 
             enMedicion=true
+
         }else{
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
-
+            if(this.timer != null){
+                this.timer!!.cancel();
+            }
             if((this.application as App).version != 1) {
                 BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
             }else{
@@ -107,14 +140,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onDrawWave(p0: Int) {
-        println(p0);
-
-        //
-        //series?.appendData(DataPoint(tiempo,p0.toDouble()),true,40,true)
-        this@ecg_2.runOnUiThread(java.lang.Runnable {
-            tiempo+=0.001
-            series?.appendData(DataPoint(tiempo,p0.toDouble()),true,40,true)
-        })
+        oxWave?.addData(p0)
 
 
     }
@@ -159,14 +185,18 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
         if(p0 >= 40){
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+            this@ecg_2.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
+                botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+            })
+            enMedicion=false;
+            return;
         }
 
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             tiempo = p0.toDouble()
-            graph?.onDataChanged(true,true)
             duracion?.setText(p0.toString()).toString()
         })
-        graph?.onDataChanged(true,true)
         duracion?.setText(p0.toString()).toString()
 
         if(p1){
@@ -191,12 +221,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun onDrawWave(p0: Any?) {
 
         var data = p0 as Int
-        //
-        //series?.appendData(DataPoint(tiempo,p0.toDouble()),true,40,true)
-        this@ecg_2.runOnUiThread(java.lang.Runnable {
-            tiempo+=0.001
-            series?.appendData(DataPoint(tiempo,data.toDouble()),true,40,true)
-        })
+        oxWave?.addData(data)
 
 
     }
@@ -213,7 +238,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun onECGValues(key: Int, value: Int) {
         this@ecg_2.runOnUiThread(java.lang.Runnable {
 
-                graph?.onDataChanged(false,true)
+
 
             prefs?.edit()?.putBoolean("DatosCapturados",true)?.apply();
             when(key){
@@ -249,20 +274,34 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
     override fun onEcgDuration(p0: Long) {
-        MonitorDataTransmissionManager.getInstance().stopMeasure()
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
-        enMedicion=false
-        if(p0 >= 40){
-            MonitorDataTransmissionManager.getInstance().stopMeasure()
-        }
-
+        enMedicion = false;
+        this.timer!!.cancel();
         this@ecg_2.runOnUiThread(java.lang.Runnable {
-            tiempo = p0.toDouble()
-            graph?.onDataChanged(true,true)
             duracion?.setText(p0.toString()).toString()
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+            Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
+
         })
-        graph?.onDataChanged(true,true)
-        duracion?.setText(p0.toString()).toString()
-    }
+/*botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+enMedicion = false
+
+MonitorDataTransmissionManager.getInstance().stopMeasure()
+
+
+if(p0 >= 40){
+    MonitorDataTransmissionManager.getInstance().stopMeasure()
+}
+
+this@ecg_2.runOnUiThread(java.lang.Runnable {
+    tiempo = p0.toDouble()
+    graph?.onDataChanged(true,true)
+    duracion?.setText(p0.toString()).toString()
+
+})
+graph?.onDataChanged(true,true)
+duracion?.setText(p0.toString()).toString()*/
+
+
+}
 
 }

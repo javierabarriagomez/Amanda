@@ -7,9 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.text.TextUtils
 
 import android.view.View
@@ -32,12 +29,15 @@ import java.util.*
 import android.widget.*
 import java.text.SimpleDateFormat
 import android.bluetooth.BluetoothAdapter
+import android.os.*
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
+import com.mintti.visionsdk.ble.callback.IDeviceBatteryCallback
+import kotlinx.coroutines.delay
+import kotlin.concurrent.timer
 
 
-
-
-
-class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback, MonitorDataTransmissionManager.OnServiceBindListener,OnBleConnectListener{
+class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback, MonitorDataTransmissionManager.OnServiceBindListener,OnBleConnectListener,IDeviceBatteryCallback{
 
     private val deviceList = mutableListOf<BleDevice>()
     private var mBleDevice: BleDevice? = null
@@ -48,6 +48,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     private var nombreTextView: TextView? = null;
     private var imageView: ImageView? = null;
     protected var mHcService: HcService? = null
+    private var bateria: TextView? = null
 
     override fun onBackPressed() {
 
@@ -56,21 +57,43 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onResume() {
         super.onResume()
         actualizarGui()
+        if (mBleDevice != null) {
+            BleManager.getInstance().getDeviceBattery(this)
+        }else if (oldBleDevice != null){
+            var bat = MonitorDataTransmissionManager.getInstance().batteryValue
+            println("$bat%")
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                bateria?.text = "Bateria: $bat%"
+            })
+
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        if (mBluetoothAdapter == null) {
-            this@homeActivity.runOnUiThread(java.lang.Runnable {
-                android.widget.Toast.makeText(this, "Su dispositivo no soporta bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
-            })
-        } else if (!mBluetoothAdapter.isEnabled) {
-            this@homeActivity.runOnUiThread(java.lang.Runnable {
-                android.widget.Toast.makeText(this, "Debe habilitar el bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
-            })
-        } else {
-            // Bluetooth is enabled
-        }
+
+
+            val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            if (mBluetoothAdapter == null) {
+                this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    android.widget.Toast.makeText(
+                        this,
+                        "Su dispositivo no soporta bluetooth.",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                })
+            } else if (!mBluetoothAdapter.isEnabled) {
+                this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    android.widget.Toast.makeText(
+                        this,
+                        "Debe habilitar el bluetooth.",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                })
+            } else {
+                // Bluetooth is enabled
+            }
+
+
         //绑定服务，
         // 类型是 HealthMonitor（HealthMonitor健康检测仪），
         MonitorDataTransmissionManager.getInstance().bind(
@@ -92,6 +115,8 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         botonConectar = findViewById(R.id.botonConectar)
         nombreTextView = findViewById(R.id.nombreView)
         imageView = findViewById<ImageView>(R.id.imageView)
+        bateria = findViewById(R.id.bateria)
+
 
         val prefs = getSharedPreferences(
             "com.saludencamino.myapplication", Context.MODE_PRIVATE
@@ -140,8 +165,9 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
 
         }else {
-            val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-            if (mBluetoothAdapter == null) {
+
+            /*val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            //if (mBluetoothAdapter == null) {
                 this@homeActivity.runOnUiThread(java.lang.Runnable {
                     android.widget.Toast.makeText(this, "Su dispositivo no soporta bluetooth.", android.widget.Toast.LENGTH_SHORT).show()
                 })
@@ -152,7 +178,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
             } else {
                 // Bluetooth is enabled
 
-
+*/
                 if (isScanning == true && oldBleDevice == null && mBleDevice == null) {
                     isScanning = false
                     botonConectar?.setImageResource(R.drawable.conectar)
@@ -167,6 +193,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                         botonConectar?.setImageResource(R.drawable.conectar)
                         this@homeActivity.runOnUiThread(java.lang.Runnable {
                             Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                            bateria?.text=""
                         })
 
                         (this.application as App).version = 0
@@ -175,6 +202,10 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                     if (mBleDevice != null) {
                         BleManager.getInstance().stopScan()
                         BleManager.getInstance().disconnect()
+                        this@homeActivity.runOnUiThread(java.lang.Runnable {
+                            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                            bateria?.text=""
+                        })
                     }
                 } else {
                     if (!isScanning) {
@@ -229,7 +260,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                         }
                         .show()*/
                 }
-            }
+            //}
         }
     }
     private fun requestPermission() {
@@ -243,11 +274,32 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1
             )
-
         }
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestMultiplePermissions.launch(arrayOf(
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT))
+        }
+        else{
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            requestBluetooth.launch(enableBtIntent)
+        }
     }
+    private var requestBluetooth = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            //granted
+        }else{
+            //deny
+        }
+    }
+
+    private val requestMultiplePermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            permissions.entries.forEach {
+                Log.d("test006", "${it.key} = ${it.value}")
+            }
+        }
 
     fun actualizarGui(){
         val prefs = getSharedPreferences(
@@ -454,7 +506,19 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         })
         isScanning=false
         (this.application as App).version = 2
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                print("Ejecutando weas")
+                BleManager.getInstance().getDeviceBattery(this)
+            },
+            2000 // value in milliseconds
+        )
+
+
+
+
     }
+
 
     override fun onConnectFailed(p0: String?, p1: Int) {
         BleManager.getInstance().stopScan()
@@ -473,6 +537,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         (this.application as App).version = 0
         mBleDevice = null
         isScanning=false
+
     }
 
     override fun onServicesDiscovered(p0: String?, p1: MutableList<BluetoothGattService>?) {
@@ -480,7 +545,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     }
 
     override fun handleMessage(p0: Message): Boolean {
-        println(p0)
+        println("$p0 Mensjae")
         return true
     }
 
@@ -495,14 +560,19 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onBleState(p0: Int) {
         println(p0)
         if(p0 == 101){
-            botonConectar?.setImageResource(R.drawable.conectar)
+
 
             if(oldBleDevice ==null){
-                this@homeActivity.runOnUiThread(java.lang.Runnable {
-                    Toast.makeText(this, "No se encontro dispositivo", Toast.LENGTH_SHORT).show()
-                })
+                if(mBleDevice == null){
+                    botonConectar?.setImageResource(R.drawable.conectar)
+                    this@homeActivity.runOnUiThread(java.lang.Runnable {
+                        Toast.makeText(this, "No se encontro dispositivo", Toast.LENGTH_SHORT).show()
+                    })
+                }
+
             }else{
                 this@homeActivity.runOnUiThread(java.lang.Runnable {
+                    bateria?.text = ""
                     Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
                 })
             }
@@ -516,7 +586,26 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
             MonitorDataTransmissionManager.getInstance().scan(false)
             botonConectar?.setImageResource(R.drawable.desconectar)
             isScanning=false
+
+            print(MonitorDataTransmissionManager.getInstance().batteryValue)
             (this.application as App).version = 1
+            this@homeActivity.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_SHORT).show()
+            })
+
+
+
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    print("Ejecutando weas2")
+                    var bat = MonitorDataTransmissionManager.getInstance().batteryValue
+                    println("$bat%")
+                    this@homeActivity.runOnUiThread(java.lang.Runnable {
+                        bateria?.text = "Bateria: $bat%"
+                    })
+                },
+                3000 // value in milliseconds
+            )
 
         }
     }
@@ -703,6 +792,13 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     }
     override fun onUpdateDialogBleList() {
         println("Hola")
+    }
+
+    override fun onDeviceBattery(p0: Int) {
+        this@homeActivity.runOnUiThread(java.lang.Runnable {
+            bateria?.text = "Bateria: $p0%"
+        })
+
     }
 }
 

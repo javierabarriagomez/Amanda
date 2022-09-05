@@ -3,8 +3,10 @@ package com.saludencamino.myapplication
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.linktop.MonitorDataTransmissionManager
 import com.mintti.visionsdk.ble.BleManager
@@ -18,6 +20,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
     private var resultado: TextView? = null
     private var textoResultado: TextView? = null
     private var progressOverlay: View? = null
+    private var botonMedicion: ImageButton? = null
 
 
 
@@ -28,6 +31,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
         this.textoResultado = findViewById(R.id.textView4)
         progressBar = findViewById(R.id.progressBar)
         progressOverlay = findViewById(R.id.progress_overlay)
+        botonMedicion=findViewById(R.id.botonMedicionGlucosa)
 
     }
 
@@ -43,8 +47,10 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
         println("Empezando medicion")
 
         println((this.application as App).version )
-
-        progressOverlay?.visibility = View.VISIBLE;
+        this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
+            progressOverlay?.visibility = View.VISIBLE;
+            botonMedicion?.setImageResource(R.drawable.detener_medicion)
+        })
 
         if((this.application as App).version != 1){
 
@@ -53,7 +59,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                     "com.saludencamino.myapplication", Context.MODE_PRIVATE
                 )
                 prefs.edit().putFloat("temperatura",it.toFloat()).apply();
-                prefs.edit().putBoolean("DatosCapturados",true);
+                prefs.edit().putBoolean("DatosCapturados",true).apply();
                 println(it)
                 resultado?.setText(it.toString() + " °C").toString()
                 progressBar?.progress = it.toInt()
@@ -64,6 +70,10 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                 }else{
                     textoResultado?.setText("Alta").toString()
                 }
+                this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
+                    Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+                    botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+                })
                 ocultarOverlay()
             }
             BleManager.getInstance().startMeasure(MeasureType.TYPE_BT,this)

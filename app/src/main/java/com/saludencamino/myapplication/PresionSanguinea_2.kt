@@ -47,8 +47,9 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     fun ocultarOverlay(){
-        progressOverlay?.visibility = View.GONE;
-
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            progressOverlay?.visibility = View.GONE;
+        })
     }
 
 

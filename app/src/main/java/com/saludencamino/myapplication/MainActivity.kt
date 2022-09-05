@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         indicator.setViewPager(view_pager2)
 
     }
-    /** Called when the user touches the button */
+
     fun login(view: View) {
 
         if(textoContra?.text?.isEmpty() == true || textoUsuario?.text?.isEmpty() == true){
@@ -63,10 +63,12 @@ class MainActivity : AppCompatActivity() {
         }
         Toast.makeText(this, "Iniciando sesión", Toast.LENGTH_SHORT).show()
         val server = Server()
+        println("HOla")
         if(server.login(textoUsuario?.text.toString(),textoContra?.text.toString(), this)){
             val intent = Intent(this,homeActivity::class.java)
             startActivity(intent)
         }else{
+            println("Chao")
             Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show()
         }
 

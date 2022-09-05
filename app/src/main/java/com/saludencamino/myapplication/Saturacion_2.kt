@@ -1,35 +1,37 @@
 package com.saludencamino.myapplication
 
-import android.annotation.SuppressLint
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
+
 import android.os.Message
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import com.jjoe64.graphview.GraphView
+
 import com.jjoe64.graphview.series.DataPoint
 import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.MeasureType
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 import com.mintti.visionsdk.ble.callback.ISpo2ResultListener
 import com.jjoe64.graphview.series.LineGraphSeries
-import android.app.Activity
+
 import android.content.Context
 import com.linktop.MonitorDataTransmissionManager
 import com.linktop.infs.OnSpO2ResultListener
+import com.saludencamino.myapplication.view.PPGDrawWave
+import com.saludencamino.myapplication.view.WaveSurfaceView
 
 class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,Handler.Callback,OnSpO2ResultListener{
     private var isRunning: Boolean = false
     private var progressBar: ProgressBar? = null
     private var tiempo: Double = 0.0
     private var resultadoText: TextView? = null
-    private var graph: GraphView? = null
-    private var series: LineGraphSeries<DataPoint>? = null
+    private var graph: WaveSurfaceView? = null
+    private var oxWave: PPGDrawWave? = null
     private var resultado: TextView? = null
     private var corazonUI: TextView? = null
     private var botonInicio: ImageButton? = null
@@ -40,10 +42,15 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         progressBar = findViewById(R.id.progressBar4)
         resultadoText = findViewById(R.id.textView15)
         resultado = findViewById(R.id.Spo2)
-        graph = findViewById(R.id.graph)
+        //graph = findViewById(R.id.graph)
+        graph = findViewById(R.id.bo_wave_view)
+
         botonInicio = findViewById(R.id.imageButton5)
         corazonUI = findViewById(R.id.CORAZON)
-        series = LineGraphSeries()
+
+
+        oxWave = PPGDrawWave()
+        graph?.setDrawWave(oxWave)
 
 
     }
@@ -61,9 +68,6 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             }
             tiempo = 0.0
             isRunning=true
-            series = LineGraphSeries()
-            graph?.removeAllSeries()
-            graph?.addSeries(series)
         }else{
             botonInicio?.setImageResource(R.drawable.iniciar_medicion)
             if((this.application as App).version != 1) {
@@ -74,7 +78,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
             isRunning=false;
             tiempo = 0.0
-            series = LineGraphSeries();
+
         }
 
     }
@@ -88,14 +92,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     //version 2.0
 
     override fun onWaveData(p0: Int) {
-        tiempo+=1
-
-        series?.appendData(DataPoint(tiempo,p0.toDouble()),true,50,true)
-        if(tiempo.toInt() % 200 == 0){
-            graph?.onDataChanged(false,true)
-        }
-
-
+        oxWave!!.addData(p0)
     }
 
     override fun onBoResultData(corazon: Int, spo2: Double) {
@@ -124,7 +121,6 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
             isRunning=false;
             tiempo = 0.0
-            series = LineGraphSeries();
 
 
         }
@@ -178,20 +174,13 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             toastFinalizado()
             isRunning=false;
             tiempo = 0.0
-            series = LineGraphSeries();
 
 
         }
     }
 
     override fun onSpO2Wave(p0: Int) {
-        print(p0);
-        tiempo+=1
-
-        series?.appendData(DataPoint(tiempo,p0.toDouble()),true,8,true)
-        if(tiempo.toInt() % 120 == 0){
-            graph?.onDataChanged(false,true)
-        }
+        oxWave!!.addData(p0)
     }
 
     override fun onSpO2End() {
