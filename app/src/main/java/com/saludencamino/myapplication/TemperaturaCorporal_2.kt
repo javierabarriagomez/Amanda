@@ -89,7 +89,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                 progressBar?.progress = it.toInt()
                 if(it < 36.5){
                     textoResultado?.setText("Baja").toString()
-                }else if(it > 36.5 && it < 37.5 ){
+                }else if(it >= 36.5 && it < 37.5 ){
                     textoResultado?.setText("Normal").toString()
                 }else{
                     textoResultado?.setText("Alta").toString()

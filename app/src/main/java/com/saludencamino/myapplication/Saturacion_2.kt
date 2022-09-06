@@ -58,7 +58,9 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
     fun tomarMedicion(view: View){
         if(!isRunning){
-            botonInicio?.setImageResource(R.drawable.detener_medicion)
+            this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+                botonInicio?.setImageResource(R.drawable.detener_medicion)
+            })
             if((this.application as App).version != 1) {
                 BleManager.getInstance().setSpo2ResultListener(this)
                 BleManager.getInstance().startMeasure(MeasureType.TYPE_SPO2,this)
@@ -69,7 +71,9 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             tiempo = 0.0
             isRunning=true
         }else{
-            botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+                botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            })
             if((this.application as App).version != 1) {
                 BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
             }else{
@@ -96,19 +100,23 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     }
 
     override fun onBoResultData(corazon: Int, spo2: Double) {
-        progressBar?.progress = spo2.toInt()
-        resultado?.setText(spo2.toString() + " %").toString()
-        corazonUI?.setText(corazon.toString() + " BPM").toString()
-        if(spo2 > 95.0){
-            resultadoText?.text = "Normal"
-        }else if(spo2 < 95.0 && spo2 > 91.0){
-            resultadoText?.text = "Bajo"
-        }else{
-            resultadoText?.text = "Extremadamente Bajo"
-        }
+        this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+            progressBar?.progress = spo2.toInt()
+            resultado?.setText(spo2.toString() + " %").toString()
+            corazonUI?.setText(corazon.toString() + " BPM").toString()
+            if (spo2 > 95.0) {
+                resultadoText?.text = "Normal"
+            } else if (spo2 < 95.0 && spo2 > 91.0) {
+                resultadoText?.text = "Bajo"
+            } else {
+                resultadoText?.text = "Extremadamente Bajo"
+            }
+        })
 
         if(corazon != 0 && spo2 != 0.0){
-            botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+                botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            })
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
             val prefs = getSharedPreferences(
                 "com.saludencamino.myapplication", Context.MODE_PRIVATE
@@ -157,19 +165,23 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         println("Finalizado");
         println(corazon);
         println(spo2);
-        progressBar?.progress = spo2.toInt()
-        resultado?.setText(spo2.toString() + " %").toString()
-        corazonUI?.setText(corazon.toString() + " BPM").toString()
-        if(spo2 > 95.0){
-            resultadoText?.text = "Normal"
-        }else if(spo2 < 95.0 && spo2 > 91.0){
-            resultadoText?.text = "Bajo"
-        }else{
-            resultadoText?.text = "Extremadamente Bajo"
-        }
+        this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+            progressBar?.progress = spo2.toInt()
+            resultado?.setText(spo2.toString() + " %").toString()
+            corazonUI?.setText(corazon.toString() + " BPM").toString()
+            if (spo2 > 95.0) {
+                resultadoText?.text = "Normal"
+            } else if (spo2 < 95.0 && spo2 > 91.0) {
+                resultadoText?.text = "Bajo"
+            } else {
+                resultadoText?.text = "Extremadamente Bajo"
+            }
+        })
 
         if(corazon != 0 && spo2 != 0){
-            botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+                botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+            })
             MonitorDataTransmissionManager.getInstance().stopMeasure()
             toastFinalizado()
             isRunning=false;
