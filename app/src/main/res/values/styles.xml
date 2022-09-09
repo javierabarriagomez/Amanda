@@ -6,5 +6,29 @@
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/cicular</item>
     </style>
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/input</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/input
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/input
+        </item>
+    </style>
+
+    <style name="MySwitch">
+        <item name="colorControlActivated">@color/input</item>
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
+
+    <style name="MySwitchCompat" >
+        <item name="colorControlActivated">@color/Letras</item>
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
 
 </resources>

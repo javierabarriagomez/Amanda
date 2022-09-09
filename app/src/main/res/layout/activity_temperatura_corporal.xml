@@ -107,9 +107,9 @@
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:text="1.- Ubique el dispositivo a 5 cm de la frente. como se puede observar en la imagen y luego presione iniciar medición."
-            android:textColor="@color/input" />
+            android:text="1.- Ubique el dispositivo a 3 cm de la frente. como se puede observar en la imagen y luego presione iniciar medición."
+            android:textColor="@color/input"
+            android:textSize="14dp" />
 
         <ImageView
             android:id="@+id/imageView23"

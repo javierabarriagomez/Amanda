@@ -131,8 +131,10 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         barra_dias?.setProgress(dias)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         })
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+
+
     }
 
     override fun onBpResultError() {
@@ -142,7 +144,9 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
         })
         enMedicion=false
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        })
     }
 
     override fun onLeakError(p0: Int) {
@@ -152,7 +156,9 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
         })
         enMedicion=false
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        })
     }
 
     override fun onLeadError() {
@@ -163,7 +169,9 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
         })
         enMedicion=false
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        })
     }
 
     override fun onBpError() {
@@ -174,6 +182,8 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
         })
         enMedicion=false
-        botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
+            botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+        })
     }
 }

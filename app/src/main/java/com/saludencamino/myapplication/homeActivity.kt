@@ -661,6 +661,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         satObj.put("horarioMedicion",SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()).toPattern());
         //glucosa
         val glucosa = prefs.getFloat("glucosa",-1F)
+        val ayuna = prefs.getBoolean("ayuna",false)
 
 
         val glucObj = JSONObject()
@@ -669,9 +670,14 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         }else{
             glucObj.put("mgd",JSONObject.NULL)
         }
+        if(ayuna){
+            glucObj.put("ayuna","true")
+        }else{
+            glucObj.put("ayuna","false")
+        }
 
-        glucObj.put("diabetes",JSONObject.NULL)
-        glucObj.put("ayuna",JSONObject.NULL)
+        glucObj.put("diabetes","false")
+
         glucObj.put("horarioMedicion",SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()).toPattern());
 
         //presion
@@ -710,6 +716,8 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         val hrv = prefs.getInt("hrv",-1)
         val rr = prefs.getInt("rr",-1)
         val hr3 = prefs.getInt("hr",-1)
+        val duration = prefs.getInt("duration",0)
+        val mood = prefs.getInt("mood",0)
 
         val ecgObj = JSONObject();
 
@@ -739,6 +747,8 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         }else{
             ecgObj.put("ritmoCardiaco",JSONObject.NULL)
         }
+        ecgObj.put("mood",mood)
+        ecgObj.put("duration", duration)
         ecgObj.put("horarioMedicion",SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()).toPattern());
 
 
@@ -763,7 +773,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         val server = Server();
         if(server.saveData(this,body)){
             this@homeActivity.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "datos subidos correctamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Mediciones Recibidas Conforme.", Toast.LENGTH_SHORT).show();
             })
 
            prefs.edit().remove("DatosCapturados").commit()

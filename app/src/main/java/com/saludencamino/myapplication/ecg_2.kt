@@ -1,6 +1,7 @@
 package com.saludencamino.myapplication
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
@@ -38,11 +39,10 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
     private var botonMedicion: ImageButton? = null
     private var enMedicion:Boolean = false
-    private var ritmoCardiaco: TextView? = null
+
     private var rpiMax: TextView? = null
     private var rpiMin: TextView? = null
-    private var duracion: TextView? = null
-    private var hrv: TextView? = null
+
     private var respiracion: TextView? =null
     //private var graph: GraphView? = null
     //private var series: LineGraphSeries<DataPoint>? = null
@@ -62,12 +62,12 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         )
         setContentView(R.layout.activity_ecg2)
         botonMedicion=findViewById(R.id.botonMedicionGlucosa)
-        ritmoCardiaco= findViewById(R.id.ritmoCardiaco)
+        //ritmoCardiaco= findViewById(R.id.ritmoCardiaco)
         rpiMax=findViewById(R.id.rpiMax)
         rpiMin=findViewById(R.id.rpiMin)
-        duracion=findViewById(R.id.duracion)
-        hrv=findViewById(R.id.hrv)
-        respiracion=findViewById(R.id.respiracion)
+        //duracion=findViewById(R.id.duracion)
+        //hrv=findViewById(R.id.hrv)
+        //respiracion=findViewById(R.id.respiracion)
         oxWave = PPGDrawWave()
         graph = findViewById(R.id.bo_wave_view)
 
@@ -96,7 +96,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
                         override fun run() {
                             tiempoTimer ++;
                             this@ecg_2.runOnUiThread(java.lang.Runnable {
-                                duracion?.text =tiempoTimer.toString();
+                                //duracion?.text =tiempoTimer.toString();
 
                             })
                         }
@@ -110,7 +110,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             oxWave?.clear()
             tiempo = 0.0
             tiempoTimer=0;
-            duracion?.text ="0";
+            //duracion?.text ="0";
 
             enMedicion=true
 
@@ -147,9 +147,9 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
     override fun onHeartRate(p0: Int) {
         prefs?.edit()?.putInt("hr",p0)?.apply();
-        this@ecg_2.runOnUiThread(java.lang.Runnable {
+        /*this@ecg_2.runOnUiThread(java.lang.Runnable {
             ritmoCardiaco?.setText(p0.toString()).toString()
-        })
+        })*/
 
     }
 
@@ -169,13 +169,14 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         prefs?.edit()?.putInt("rrmin",rrMin)?.apply();
         prefs?.edit()?.putInt("hrv",hrv)?.apply();
         prefs?.edit()?.putBoolean("DatosCapturados",true)?.apply();
+        prefs?.edit()?.putInt("duration",tiempoTimer)?.apply();
 
 
 
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             this.rpiMax?.setText(rrMax.toString()).toString()
             this.rpiMin?.setText(rrMin.toString()).toString()
-            this.hrv?.setText(hrv.toString()).toString()
+            //this.hrv?.setText(hrv.toString()).toString()
         })
 
 
@@ -184,6 +185,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun onEcgDuration(p0: Int, p1: Boolean) {
 
         if(p0 >= 40){
+            prefs?.edit()?.putInt("duration",tiempoTimer)?.apply();
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
             this@ecg_2.runOnUiThread(java.lang.Runnable {
                 Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
@@ -195,10 +197,10 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             tiempo = p0.toDouble()
-            duracion?.setText(p0.toString()).toString()
+            //duracion?.setText(p0.toString()).toString()
         })
-        duracion?.setText(p0.toString()).toString()
-
+        //duracion?.setText(p0.toString()).toString()
+        prefs?.edit()?.putInt("duration",p0)?.apply();
         if(p1){
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
@@ -228,6 +230,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
     fun goBack(view: View){
         super.onBackPressed()
+
     }
 
 
@@ -253,15 +256,15 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
                 }
                 2 ->{ //HR
-                    this.ritmoCardiaco?.setText(value.toString()).toString()
+                    //this.ritmoCardiaco?.setText(value.toString()).toString()
                     prefs?.edit()?.putInt("hr",value)?.apply();
                 }
                 3 ->{ //HRV
-                    this.hrv?.setText(value.toString()).toString()
+                    //this.hrv?.setText(value.toString()).toString()
                     prefs?.edit()?.putInt("hrv",value)?.apply();
                 }
                 4 ->{ //MOOD
-
+                    prefs?.edit()?.putInt("mood",value)?.apply();
                 }
                 5 ->{ //RR
                     respiracion?.setText(value.toString()).toString()
@@ -277,7 +280,8 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         enMedicion = false;
         this.timer!!.cancel();
         this@ecg_2.runOnUiThread(java.lang.Runnable {
-            duracion?.setText(p0.toString()).toString()
+            prefs?.edit()?.putInt("duration",p0.toInt())?.apply();
+            //duracion?.setText(p0.toString()).toString()
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
             Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
 

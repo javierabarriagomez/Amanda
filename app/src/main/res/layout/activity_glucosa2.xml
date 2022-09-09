@@ -188,6 +188,16 @@
             android:progress="0"
             android:progressTint="@color/input" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/MySwitch"
+            android:checked="false"
+
+            android:text="En ayuna"
+            android:textColor="@color/black" />
+
         <ImageButton
             android:id="@+id/botonMedicionGlucosa"
             android:layout_width="match_parent"

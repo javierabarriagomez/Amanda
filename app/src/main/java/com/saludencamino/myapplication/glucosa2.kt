@@ -8,7 +8,9 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.internal.ContextUtils.getActivity
 import com.linktop.MonitorDataTransmissionManager
 import com.linktop.constant.BgPagerCaliCode
@@ -35,6 +37,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     private var mensaje: TextView? =null
     private var botonMedicionGlucosa: ImageButton? = null
     private var enMedicion:Boolean = false
+    private var ayuna: SwitchCompat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
         mensaje= findViewById(R.id.mensaje)
         botonMedicionGlucosa = findViewById(R.id.botonMedicionGlucosa)
+        ayuna = findViewById(R.id.switch1)
     }
 
     fun goBack(view: View){
@@ -54,6 +58,10 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     fun iniciarMedicion(view: View){
         if(!enMedicion){
             botonMedicionGlucosa?.setImageResource(R.drawable.detener_medicion)
+
+            ayuna?.isClickable=false
+
+
 
 
             if((this.application as App).version != 1) {
@@ -67,6 +75,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
             enMedicion=true
         }else{
+            ayuna?.isClickable=true
             mensaje?.setText("").toString()
             botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
             if((this.application as App).version != 1) {
@@ -111,14 +120,20 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             "com.saludencamino.myapplication", Context.MODE_PRIVATE
         )
         prefs.edit().putFloat("glucosa",res.toFloat()).apply();
+        prefs.edit().putBoolean("ayuna",ayuna?.isChecked == true ).apply()
+        prefs.edit().putBoolean("DatosCapturados",true).apply();
 
 
-        resultado?.setText(p0.toString()).toString()
-        resultadoBarra?.setProgress(res.toInt(),true)
-        resultadoBarra2?.setProgress(res.toInt(),true)
-        mensaje?.setText("Examen finalizado").toString()
+
         enMedicion=false
-        botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
+        this@glucosa2.runOnUiThread(java.lang.Runnable {
+            resultado?.setText(p0.toString()).toString()
+            resultadoBarra?.setProgress(res.toInt(),true)
+            resultadoBarra2?.setProgress(res.toInt(),true)
+            mensaje?.setText("Examen finalizado").toString()
+            Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+            botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
+        })
     }
 
     override fun handleMessage(p0: Message): Boolean {
@@ -136,14 +151,20 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     override fun onBgEvent(eventId: Int, Object: Any?) {
         when(eventId){
             1 ->{
-                mensaje?.setText("El test ha sido insertado en el dispositivo").toString()
+                this@glucosa2.runOnUiThread(java.lang.Runnable {
+                    mensaje?.setText("El test ha sido insertado en el dispositivo").toString()
+                })
             }
             BgTask.EVENT_PAGER_READ ->{
-                mensaje?.setText("Esperando muestra de sangre").toString()
+                this@glucosa2.runOnUiThread(java.lang.Runnable {
+                    mensaje?.setText("Esperando muestra de sangre").toString()
+                })
 
             }
         BgTask.EVENT_BLOOD_SAMPLE_DETECTING ->{
-            mensaje?.setText("Analizando muestra").toString()
+            this@glucosa2.runOnUiThread(java.lang.Runnable {
+                mensaje?.setText("Analizando muestra").toString()
+            })
         }
         BgTask.EVENT_TEST_RESULT ->{
             var resa = Object as Double;
@@ -152,14 +173,20 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             val prefs = getSharedPreferences(
                 "com.saludencamino.myapplication", Context.MODE_PRIVATE
             )
+
+            prefs.edit().putBoolean("ayuna",ayuna?.isChecked == true ).apply()
             prefs.edit().putFloat("glucosa",res.toFloat()).apply()
             prefs.edit().putBoolean("DatosCapturados",true).apply();
             resultado?.setText(res.toString()).toString()
             resultadoBarra?.setProgress(res.toInt(),true)
             resultadoBarra2?.setProgress(res.toInt(),true)
-            mensaje?.setText("Examen finalizado").toString()
+
             enMedicion=false
-            botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
+            this@glucosa2.runOnUiThread(java.lang.Runnable {
+                Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+                botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
+                mensaje?.setText("Examen finalizado").toString()
+            })
         }
         }
     }
