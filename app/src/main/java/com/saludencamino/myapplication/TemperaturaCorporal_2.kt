@@ -71,7 +71,7 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                     textoResultado?.setText("Alta").toString()
                 }
                 this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
-                    Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
                     botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
                 })
                 ocultarOverlay()
@@ -94,6 +94,10 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                 }else{
                     textoResultado?.setText("Alta").toString()
                 }
+                this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
+                    Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
+                    botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
+                })
                 ocultarOverlay()
             }
             MonitorDataTransmissionManager.getInstance()

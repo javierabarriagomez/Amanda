@@ -188,7 +188,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             prefs?.edit()?.putInt("duration",tiempoTimer)?.apply();
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
             this@ecg_2.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_LONG).show()
                 botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
             })
             enMedicion=false;
@@ -283,7 +283,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             prefs?.edit()?.putInt("duration",p0.toInt())?.apply();
             //duracion?.setText(p0.toString()).toString()
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
-            Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_LONG).show()
 
         })
 /*botonMedicion?.setImageResource(R.drawable.iniciar_medicion)

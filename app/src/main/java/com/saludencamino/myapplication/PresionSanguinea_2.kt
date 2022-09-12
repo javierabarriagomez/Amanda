@@ -68,7 +68,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
             }
             enMedicion = true
             this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Iniciando medición", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Iniciando medición", Toast.LENGTH_LONG).show()
             })
             botonMedicion?.setImageResource(R.drawable.detener_medicion)
         }else{
@@ -80,7 +80,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
             enMedicion=false;
             ocultarOverlay()
             this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Se detuvo la medición", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Se detuvo la medición", Toast.LENGTH_LONG).show()
             })
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
 
@@ -130,7 +130,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         barra_sis?.setProgress(sys)
         barra_dias?.setProgress(dias)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         })
 
@@ -141,7 +141,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
 
         ocultarOverlay()
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_LONG).show()
         })
         enMedicion=false
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
@@ -153,7 +153,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         ocultarOverlay()
         println("Otro error de mierda")
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_LONG).show()
         })
         enMedicion=false
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
@@ -166,7 +166,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_LONG).show()
         })
         enMedicion=false
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
@@ -179,7 +179,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_LONG).show()
         })
         enMedicion=false
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {

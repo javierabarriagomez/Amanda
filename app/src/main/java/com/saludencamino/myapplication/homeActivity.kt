@@ -78,7 +78,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                     android.widget.Toast.makeText(
                         this,
                         "Su dispositivo no soporta bluetooth.",
-                        android.widget.Toast.LENGTH_SHORT
+                        android.widget.Toast.LENGTH_LONG
                     ).show()
                 })
             } else if (!mBluetoothAdapter.isEnabled) {
@@ -86,7 +86,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                     android.widget.Toast.makeText(
                         this,
                         "Debe habilitar el bluetooth.",
-                        android.widget.Toast.LENGTH_SHORT
+                        android.widget.Toast.LENGTH_LONG
                     ).show()
                 })
             } else {
@@ -158,7 +158,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                 ) != PackageManager.PERMISSION_GRANTED)
                 {
                     this@homeActivity.runOnUiThread(java.lang.Runnable {
-                        android.widget.Toast.makeText(this, "Debe habilitar la busqueda de dispositivos", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(this, "Debe habilitar la busqueda de dispositivos", android.widget.Toast.LENGTH_LONG).show()
                     })
                 }
 
@@ -192,7 +192,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                         MonitorDataTransmissionManager.getInstance().disConnectBle()
                         botonConectar?.setImageResource(R.drawable.conectar)
                         this@homeActivity.runOnUiThread(java.lang.Runnable {
-                            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Desconectado", Toast.LENGTH_LONG).show()
                             bateria?.text=""
                         })
 
@@ -203,7 +203,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                         BleManager.getInstance().stopScan()
                         BleManager.getInstance().disconnect()
                         this@homeActivity.runOnUiThread(java.lang.Runnable {
-                            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Desconectado", Toast.LENGTH_LONG).show()
                             bateria?.text=""
                         })
                     }
@@ -425,7 +425,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
     fun mensajeSinConexion(){
         this@homeActivity.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Debe conectar el dispositivo primero", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Debe conectar el dispositivo primero", Toast.LENGTH_LONG).show()
         })
     }
 
@@ -502,7 +502,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         BleManager.getInstance().stopScan()
         botonConectar?.setImageResource(R.drawable.desconectar)
         this@homeActivity.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_LONG).show()
         })
         isScanning=false
         (this.application as App).version = 2
@@ -524,7 +524,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         BleManager.getInstance().stopScan()
         mBleDevice=null
         this@homeActivity.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Error al conectar intente nuevamente", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error al conectar intente nuevamente", Toast.LENGTH_LONG).show()
         })
 
     }
@@ -532,7 +532,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onDisconnected(p0: String?, p1: Boolean, p2: Int) {
         botonConectar?.setImageResource(R.drawable.conectar)
         this@homeActivity.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Desconectado", Toast.LENGTH_LONG).show()
         })
         (this.application as App).version = 0
         mBleDevice = null
@@ -566,14 +566,14 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                 if(mBleDevice == null){
                     botonConectar?.setImageResource(R.drawable.conectar)
                     this@homeActivity.runOnUiThread(java.lang.Runnable {
-                        Toast.makeText(this, "No se encontro dispositivo", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "No se encontro dispositivo", Toast.LENGTH_LONG).show()
                     })
                 }
 
             }else{
                 this@homeActivity.runOnUiThread(java.lang.Runnable {
                     bateria?.text = ""
-                    Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Desconectado", Toast.LENGTH_LONG).show()
                 })
             }
 
@@ -590,7 +590,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
             print(MonitorDataTransmissionManager.getInstance().batteryValue)
             (this.application as App).version = 1
             this@homeActivity.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Conectado correctamente", Toast.LENGTH_LONG).show()
             })
 
 
@@ -621,7 +621,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
         if(!prefs.getBoolean("DatosCapturados",false)){
             this@homeActivity.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "No hay datos para enviar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No hay datos para enviar", Toast.LENGTH_LONG).show()
             })
 
 
@@ -755,7 +755,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         val userId = prefs.getLong("idUsuario",-1)
         if(userId == -1L){
             this@homeActivity.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Error interno!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error interno!", Toast.LENGTH_LONG).show()
             })
             return;
         }
@@ -773,7 +773,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         val server = Server();
         if(server.saveData(this,body)){
             this@homeActivity.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Mediciones Recibidas Conforme.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Mediciones Recibidas Conforme.", Toast.LENGTH_LONG).show();
             })
 
            prefs.edit().remove("DatosCapturados").commit()
@@ -796,7 +796,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
             findViewById<ImageButton>(R.id.imageButton11)?.setImageResource(R.drawable.ecg)
        }else{
             this@homeActivity.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Error interno", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error interno", Toast.LENGTH_LONG).show();
             })
        }
     }

@@ -89,7 +89,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     }
     private fun toastFinalizado(){
         this@Saturacion_2.runOnUiThread(java.lang.Runnable {
-            Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_LONG).show()
         })
 
     }

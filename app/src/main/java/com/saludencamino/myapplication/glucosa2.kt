@@ -131,7 +131,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             resultadoBarra?.setProgress(res.toInt(),true)
             resultadoBarra2?.setProgress(res.toInt(),true)
             mensaje?.setText("Examen finalizado").toString()
-            Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
             botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
         })
     }
@@ -183,7 +183,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
             enMedicion=false
             this@glucosa2.runOnUiThread(java.lang.Runnable {
-                Toast.makeText(this, "Examen finalizado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
                 botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
                 mensaje?.setText("Examen finalizado").toString()
             })
