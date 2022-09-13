@@ -65,10 +65,6 @@
                 app:srcCompat="@drawable/menu"
                 tools:ignore="SpeakableTextPresentCheck" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
             <ImageButton
                 android:id="@+id/imageButton3"
@@ -76,7 +72,7 @@
                 android:layout_height="50dp"
                 android:background="#00FFFFFF"
                 android:scaleType="fitEnd"
-                app:srcCompat="@drawable/perfil_2"
+                app:srcCompat="@drawable/dispositivo_amanda"
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>
@@ -221,7 +217,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="0"
+                    android:text="0 ms"
                     android:textAlignment="center"
                     android:textColor="@color/input"
                     android:textSize="25dp" />
@@ -252,7 +248,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="0"
+                    android:text="0 ms"
                     android:textAlignment="center"
                     android:textColor="@color/input"
                     android:textSize="25dp" />

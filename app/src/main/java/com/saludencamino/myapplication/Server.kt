@@ -17,8 +17,8 @@ import com.beust.klaxon.*
 private val klaxon = Klaxon()
 
 class Server {
-    var url = "https://apiamanda.nevape.cl/api" //Nevape
-    //var url = "http://desarrollo.saludencamino.com:3211/api"
+    //var url = "https://apiamanda.nevape.cl/api" //Nevape
+    var url = "http://desarrollo.saludencamino.com:3211/api"
     fun login(user: String,password: String,context: Context):Boolean {
         println("Antes")
         val body = JSONObject();

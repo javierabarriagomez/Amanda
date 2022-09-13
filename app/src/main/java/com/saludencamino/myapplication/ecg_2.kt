@@ -174,8 +174,8 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
 
         this@ecg_2.runOnUiThread(java.lang.Runnable {
-            this.rpiMax?.setText(rrMax.toString()).toString()
-            this.rpiMin?.setText(rrMin.toString()).toString()
+            this.rpiMax?.setText(rrMax.toString()+" ms").toString()
+            this.rpiMin?.setText(rrMin.toString()+" ms").toString()
             //this.hrv?.setText(hrv.toString()).toString()
         })
 
@@ -246,12 +246,12 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             prefs?.edit()?.putBoolean("DatosCapturados",true)?.apply();
             when(key){
                 0 ->{ //RRI MAX
-                    this.rpiMax?.setText(value.toString()).toString()
+                    this.rpiMax?.setText(value.toString() + " ms").toString()
                     prefs?.edit()?.putInt("rrmax",value)?.apply();
 
                 }
                 1 ->{ //RRI MIN
-                    this.rpiMin?.setText(value.toString()).toString()
+                    this.rpiMin?.setText(value.toString() + " ms").toString()
                     prefs?.edit()?.putInt("rrmin",value)?.apply();
 
                 }
