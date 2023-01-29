@@ -45,7 +45,6 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
         resultado = findViewById(R.id.glucosaResultado)
         resultadoBarra = findViewById(R.id.resultadoBarra)
         resultadoBarra2 = findViewById(R.id.resultadoBarra2)
-
         mensaje= findViewById(R.id.mensaje)
         botonMedicionGlucosa = findViewById(R.id.botonMedicionGlucosa)
         ayuna = findViewById(R.id.switch1)
@@ -56,6 +55,10 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     }
 
     fun iniciarMedicion(view: View){
+        //reset values
+        resultado?.text= "0"
+        resultadoBarra?.setProgress(0)
+        resultadoBarra2?.setProgress(0)
         if(!enMedicion){
             botonMedicionGlucosa?.setImageResource(R.drawable.detener_medicion)
 
@@ -126,8 +129,12 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
 
         enMedicion=false
+
+        val valor = String.format("%.1f",res)
+
+
         this@glucosa2.runOnUiThread(java.lang.Runnable {
-            resultado?.setText(p0.toString()).toString()
+            resultado?.setText(valor).toString()
             resultadoBarra?.setProgress(res.toInt(),true)
             resultadoBarra2?.setProgress(res.toInt(),true)
             mensaje?.setText("Examen finalizado").toString()
@@ -175,14 +182,18 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             )
 
             prefs.edit().putBoolean("ayuna",ayuna?.isChecked == true ).apply()
-            prefs.edit().putFloat("glucosa",res.toFloat()).apply()
+
             prefs.edit().putBoolean("DatosCapturados",true).apply();
-            resultado?.setText(res.toString()).toString()
-            resultadoBarra?.setProgress(res.toInt(),true)
-            resultadoBarra2?.setProgress(res.toInt(),true)
+
 
             enMedicion=false
+            val mgdl = resa
+            val valor = String.format("%.1f",mgdl)
+            prefs.edit().putFloat("glucosa",valor.toFloat()).apply()
             this@glucosa2.runOnUiThread(java.lang.Runnable {
+                resultado?.setText(valor).toString()
+                resultadoBarra?.setProgress(res.toInt(),true)
+                resultadoBarra2?.setProgress(res.toInt(),true)
                 Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
                 botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
                 mensaje?.setText("Examen finalizado").toString()

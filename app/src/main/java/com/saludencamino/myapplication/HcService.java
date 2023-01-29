@@ -1,5 +1,6 @@
 package com.saludencamino.myapplication;
 
+import android.Manifest;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -25,6 +26,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 
 import com.linktop.constant.BluetoothState;
 import com.linktop.constant.UUIDConfig;
@@ -307,7 +309,7 @@ public class HcService extends Service {
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(UUIDConfig.CCC));
         // This is specific to Heart Rate Measurement.
         if (UUIDConfig.HEART_RATE_MEASUREMENT_CHARA.equals(characteristic.getUuid().toString()) && enabled) {
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
         } else {
             descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
         }
@@ -393,6 +395,16 @@ public class HcService extends Service {
 
     public void disConnect() {
         if (mGatt != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             mGatt.disconnect();
         }
     }

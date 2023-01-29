@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 
 import com.linktop.MonitorDataTransmissionManager;
 import com.linktop.whealthService.BleDevManager;
+import com.mintti.visionsdk.ble.BleManager;
 
 import lib.linktop.sev.CssServerApi;
 
@@ -13,6 +14,7 @@ public class App extends Application {
 
     private int version;
     public static App app;
+
 
     public int getVersion() {
         return version;
@@ -28,6 +30,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        BleManager.getInstance().init( this);
         app = this;
 
         MonitorDataTransmissionManager.isDebug(true);

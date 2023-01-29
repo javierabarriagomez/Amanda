@@ -1,6 +1,7 @@
 package com.saludencamino.myapplication
 
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -36,7 +37,9 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     private var resultado: TextView? = null
     private var corazonUI: TextView? = null
     private var botonInicio: ImageButton? = null
+    private var progressOverlay: View? = null
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_saturacion2)
@@ -45,11 +48,9 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         resultado = findViewById(R.id.Spo2)
         //graph = findViewById(R.id.graph)
         graph = findViewById(R.id.bo_wave_view)
-
         botonInicio = findViewById(R.id.imageButton5)
         corazonUI = findViewById(R.id.CORAZON)
-
-
+        progressOverlay = findViewById(R.id.progress_overlay)
         oxWave = PPGDrawWave()
         graph?.setDrawWave(oxWave)
 
@@ -58,11 +59,24 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
 
     fun tomarMedicion(view: View){
+
+
+
+        //reset values
+        resultado?.text= "0.0%"
+        resultadoText?.text = "NORMAL"
+        progressBar?.setProgress(0)
+
+
         if(!isRunning){
+
             this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+                progressOverlay?.visibility = View.VISIBLE;
                 botonInicio?.setImageResource(R.drawable.detener_medicion)
+
             })
             if((this.application as App).version != 1) {
+
                 BleManager.getInstance().setSpo2ResultListener(this)
                 BleManager.getInstance().startMeasure(MeasureType.TYPE_SPO2,this)
             }else{
@@ -73,9 +87,11 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             isRunning=true
         }else{
             this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+
                 botonInicio?.setImageResource(R.drawable.iniciar_medicion)
             })
             if((this.application as App).version != 1) {
+
                 BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
             }else{
                 MonitorDataTransmissionManager.getInstance().stopMeasure()
@@ -93,6 +109,13 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         })
 
     }
+    fun ocultarOverlay(){
+        progressOverlay?.visibility = View.GONE;
+
+
+    }
+
+
 
     //version 2.0
 
@@ -101,9 +124,11 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     }
 
     override fun onBoResultData(corazon: Int, spo2: Double) {
+
         this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+
             progressBar?.progress = spo2.toInt()
-            resultado?.setText(spo2.toString() + " %").toString()
+            resultado?.setText(spo2.toString() + "%").toString()
             corazonUI?.setText(corazon.toString() + " BPM").toString()
             if (spo2 > 95.0) {
                 resultadoText?.text = "Normal"
@@ -117,8 +142,11 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         if(corazon != 0 && spo2 != 0.0){
             this@Saturacion_2.runOnUiThread(java.lang.Runnable {
                 botonInicio?.setImageResource(R.drawable.iniciar_medicion)
+
             })
+
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
+            ocultarOverlay()
             val prefs = getSharedPreferences(
                 "com.saludencamino.myapplication", Context.MODE_PRIVATE
             )
@@ -133,7 +161,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
 
         }
-
+        ocultarOverlay()
     }
 
     override fun onWriteSuccess() {
@@ -167,6 +195,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         println(corazon);
         println(spo2);
         this@Saturacion_2.runOnUiThread(java.lang.Runnable {
+
             progressBar?.progress = spo2.toInt()
             resultado?.setText(spo2.toString() + " %").toString()
             corazonUI?.setText(corazon.toString() + " BPM").toString()
@@ -183,6 +212,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             this@Saturacion_2.runOnUiThread(java.lang.Runnable {
                 botonInicio?.setImageResource(R.drawable.iniciar_medicion)
             })
+
             MonitorDataTransmissionManager.getInstance().stopMeasure()
             toastFinalizado()
             isRunning=false;
@@ -190,6 +220,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
 
         }
+        ocultarOverlay()
     }
 
     override fun onSpO2Wave(p0: Int) {

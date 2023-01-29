@@ -117,7 +117,7 @@
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="90dp"
             app:srcCompat="@drawable/glucosa_sangre"
             tools:ignore="MissingConstraints" />
 
@@ -125,14 +125,26 @@
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:text="1.- Ubique el dedo índice sutilmente cubriendo el sensor como se muestra en la imagen.\n2.- Inicie la medición. Se encenderá una luz roja, mantenga el dedo sobre el sensor hasta que la luz roja se apague."
-            android:textColor="@color/input" />
+            android:text="1.-
+Tome el dispositivo junto con las lancetas y cintas reactivas, abra la tapa de goma que cubre los
+puertos de prueba y microSD y coloque el
+dispositivo con la parte metálica hacia arriba.
+\n2.- Limpie bien su dedo para la toma de muestra con
+algodón seco sin alcohol. En el dispositivo Amanda,
+coloque una cinta reactiva con la parte verde
+mirando hacia arriba en el puerto de prueba de
+glucemia.\n 3.- Coloque la punta del lancetero sobre la superficie
+del dedo limpio y presione el botón amarillo del
+lancetero, sentirá un leve pinchazo. En la aplicación,
+presione iniciar medición y acerque la pequeña gota
+de sangre en la parte blanca de la cinta insertada."
+            android:textColor="@color/input"
+            android:textSize="14dp" />
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
-            android:layout_height="186dp"
+            android:layout_height="137dp"
             app:srcCompat="@drawable/ilustra08" />
 
         <ImageButton

@@ -10,4 +10,7 @@
     <color name="Letras">#BABF2F</color>
     <color name="input">#73760A</color>
     <color name="textoBase">#878482</color>
+    <color name="colorprogress">#b46404</color>
+
+
 </resources>

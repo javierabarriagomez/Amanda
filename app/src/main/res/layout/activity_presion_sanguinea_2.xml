@@ -156,7 +156,7 @@
 
                     android:textAlignment="center"
                     android:textColor="@color/textoBase"
-                    android:textSize="40dp" />
+                    android:textSize="38dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -185,7 +185,7 @@
                     android:text="0"
                     android:textAlignment="center"
                     android:textColor="@color/textoBase"
-                    android:textSize="40dp" />
+                    android:textSize="38dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -264,6 +264,7 @@
             android:textSize="14dp"
             android:textColor="@color/textoBase" />
 
+
         <ProgressBar
             android:id="@+id/progressBar3"
             style="?android:attr/progressBarStyleHorizontal"
@@ -272,7 +273,10 @@
             android:max="200"
             android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+
+
+            />
 
         <ImageButton
             android:id="@+id/imageButton5"
@@ -285,5 +289,5 @@
             app:srcCompat="@drawable/iniciar_medicion" />
 
     </LinearLayout>
-    <include layout="@layout/loadingspinner"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

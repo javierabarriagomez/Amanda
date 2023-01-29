@@ -162,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="mmo/L"
+                android:text="mg/dL"
                 android:textAlignment="center"
                 android:textColor="@color/textoBase"
                 android:textSize="12dp" />
@@ -190,7 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="¿Esta en ayuna?"
+            android:text="¿Está en ayuna?"
             android:textColor="@color/black"
             android:textOff="NO"
             android:textOn="SI"

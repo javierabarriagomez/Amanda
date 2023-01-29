@@ -1,20 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/progress_overlay"
+    style="@style/Widget.AppCompat.PopupWindow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.4"
     android:animateLayoutChanges="true"
-    android:background="@android:color/black"
-    android:clickable="true"
-    android:visibility="gone">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"/>
+    android:clickable="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:id="@+id/textencurso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medición en curso "
+            android:textColor="@color/colorprogress"
+            android:textColorLink="#009688"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.594"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.331" />
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="58dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorprogress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.321"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.261" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>

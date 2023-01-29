@@ -116,7 +116,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="13dp" />
 
         <TextView
             android:id="@+id/textView14"
@@ -135,14 +135,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
-            android:textSize="14dp"
-            android:text="1.- Sostenga el dispositivo con la mano izquierda. Con el pulgar, toque la parte metálica del sensor de oxígeno en sangre mientras los otros dedos tocan el metal en la parte posterior del dispositivo.\n2.- Luego con el índice de la mano derecha toque el sensor de temperatura corporal, las dos manos no se deben tocar.\n3.- Inicie la medición y mantenga la posición de las manos hasta que Amanda lo indique."
-            android:textColor="@color/input" />
+            android:text="1.- Sostenga el dispositivo con la mano izquierda. Con el pulgar, toque la parte metálica del sensor de oxígeno en sangre mientras los otros dedos tocan el metal en la parte posterior del dispositivo.\n2.- Con la mano derecha, coloque con los dedos índice,
+medio y anular tocando el metal en la parte
+posterior del dispositivo Amanda.\n3.- Inicie la medición y mantenga la posición de las manos hasta que Amanda lo indique."
+            android:textColor="@color/input"
+            android:textSize="14dp" />
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
-            android:layout_height="156dp"
+            android:layout_height="139dp"
             app:srcCompat="@drawable/ilustra06" />
 
         <ImageButton

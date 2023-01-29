@@ -1,6 +1,7 @@
 package com.saludencamino.myapplication
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGattService
 import android.content.Context
@@ -57,6 +58,17 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     override fun onResume() {
         super.onResume()
         actualizarGui()
+        println("LOG: ONRESUME")
+        println("isScanning")
+        println(isScanning)
+        println("mBleDevice")
+        println(mBleDevice)
+        println("oldBleDevice")
+        println(oldBleDevice)
+        println("botonConectar")
+        println(botonConectar)
+
+
         if (mBleDevice != null) {
             BleManager.getInstance().getDeviceBattery(this)
         }else if (oldBleDevice != null){
@@ -67,11 +79,26 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
             })
 
         }
-    }
+
+
+
+
+
+
+   }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
+        println("LOG: onCreate")
+        println("isScanning")
+        println(isScanning)
+        println("mBleDevice")
+        println(mBleDevice)
+        println("oldBleDevice")
+        println(oldBleDevice)
+        println("botonConectar")
+        println(botonConectar)
             val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (mBluetoothAdapter == null) {
                 this@homeActivity.runOnUiThread(java.lang.Runnable {
@@ -132,7 +159,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
             println(foto);
             val imageBytes = Base64.decode(foto,  Base64.DEFAULT)
             println(imageBytes)
-            val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)|
 
             imageView?.setImageBitmap(image)
         }*/
@@ -141,6 +168,15 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
     }
 
     fun iniciarBusqueda(view: View){
+        println("LOG: Iniciar busqueda")
+        println("isScanning")
+        println(isScanning) // false
+        println("mBleDevice")
+        println(mBleDevice) // null
+        println("oldBleDevice")
+        println(oldBleDevice) // null
+        println("botonConectar")
+        println(botonConectar) // null
         if(ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -179,7 +215,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                 // Bluetooth is enabled
 
 */
-                if (isScanning == true && oldBleDevice == null && mBleDevice == null) {
+                if (isScanning && oldBleDevice == null && mBleDevice == null) {
                     isScanning = false
                     botonConectar?.setImageResource(R.drawable.conectar)
                     BleManager.getInstance().stopScan()
@@ -208,7 +244,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
                         })
                     }
                 } else {
-                    if (!isScanning) {
+                    if (!this.isScanning) {
                         botonConectar?.setImageResource(R.drawable.buscando)
                         isScanning = true
                         MonitorDataTransmissionManager.getInstance().scan(true);
@@ -450,6 +486,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         // Do something in response to button click
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun logout(view: View) {
 
         AlertDialog.Builder(this)
@@ -508,7 +545,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         (this.application as App).version = 2
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                print("Ejecutando weas")
+                print("Ejecutando")
                 BleManager.getInstance().getDeviceBattery(this)
             },
             2000 // value in milliseconds
@@ -597,7 +634,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
 
             Handler(Looper.getMainLooper()).postDelayed(
                 {
-                    print("Ejecutando weas2")
+                    print("Ejecutando 2")
                     var bat = MonitorDataTransmissionManager.getInstance().batteryValue
                     println("$bat%")
                     this@homeActivity.runOnUiThread(java.lang.Runnable {

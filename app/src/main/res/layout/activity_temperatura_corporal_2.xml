@@ -185,7 +185,7 @@
             android:layout_height="27dp" />
     </LinearLayout>
 
-    <include layout="@layout/loadingspinner"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -136,6 +136,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <ImageView
+                android:id="@+id/imageView40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/cells" />
         </com.google.android.material.card.MaterialCardView>
 
         <!--<com.jjoe64.graphview.GraphView
@@ -198,5 +203,7 @@
             app:srcCompat="@drawable/iniciar_medicion" />
 
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 
 class TemperaturaCorporal : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,4 +22,6 @@ class TemperaturaCorporal : AppCompatActivity() {
     fun goBack(view: View){
         super.onBackPressed()
     }
+
+
 }

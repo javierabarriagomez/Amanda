@@ -1,5 +1,6 @@
 package com.saludencamino.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,6 +11,7 @@ import android.os.Handler
 import android.os.Message
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.jjoe64.graphview.GraphView
@@ -23,6 +25,7 @@ import com.mintti.visionsdk.ble.BleManager
 import com.mintti.visionsdk.ble.bean.MeasureType
 import com.mintti.visionsdk.ble.callback.IBleWriteResponse
 import com.mintti.visionsdk.ble.callback.IEcgResultListener
+import com.saludencamino.myapplication.R.id.progressBar
 import com.saludencamino.myapplication.view.PPGDrawWave
 import com.saludencamino.myapplication.view.WaveSurfaceView
 import com.saludencamino.myapplication.view.WaveView
@@ -39,11 +42,9 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
     private var botonMedicion: ImageButton? = null
     private var enMedicion:Boolean = false
-
     private var rpiMax: TextView? = null
     private var rpiMin: TextView? = null
-
-    private var respiracion: TextView? =null
+    private var fr: TextView? =null
     //private var graph: GraphView? = null
     //private var series: LineGraphSeries<DataPoint>? = null
     private var graph: WaveSurfaceView? = null
@@ -52,9 +53,16 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     private var prefs: SharedPreferences? = null
     private var tiempoTimer = 0;
     private var timer: Timer? = null;
+    private var hrv: TextView? = null;
+   // private var progressBar: ProgressBar? = null
+    //private var progressOverlay: View? = null
 
 
 
+
+
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getSharedPreferences(
@@ -66,26 +74,37 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         rpiMax=findViewById(R.id.rpiMax)
         rpiMin=findViewById(R.id.rpiMin)
         //duracion=findViewById(R.id.duracion)
-        //hrv=findViewById(R.id.hrv)
-        //respiracion=findViewById(R.id.respiracion)
+        hrv=findViewById(R.id.hrv)
+        fr=findViewById(R.id.fr)
         oxWave = PPGDrawWave()
         graph = findViewById(R.id.bo_wave_view)
-
         graph?.setDrawWave(oxWave)
-
         tiempo = 0.0
         tiempoTimer = 0
+      //  progressBar = findViewById(R.id.progressBar)
+       // progressOverlay = findViewById(R.id.progress_overlay)
+
+
 
     }
 
     fun iniciarMedicion(view: View){
 
+        //reset values
+        rpiMax?.text="0 ms"
+        rpiMin?.text="0 ms"
+        hrv?.text="0 ms"
+        fr?.text="0 rpm"
+
         if(!enMedicion){
+
             botonMedicion?.setImageResource(R.drawable.detener_medicion)
 
             if((this.application as App).version != 1) {
+             //   progressOverlay?.visibility = View.VISIBLE;
                 BleManager.getInstance().setEcgResultListener(this)
                 BleManager.getInstance().startMeasure(MeasureType.TYPE_ECG,this)
+
             }else{
                 MonitorDataTransmissionManager.getInstance().setOnEcgResultListener(this)
                 MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.ECG)
@@ -104,6 +123,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
                     0,
                     1000
                 )
+
             }
 
 
@@ -126,8 +146,8 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             }
 
             enMedicion=false
-        }
 
+        }
 
     }
 
@@ -156,7 +176,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     override fun onRespiratoryRate(p0: Int) {
         prefs?.edit()?.putInt("rr",p0)?.apply();
         this@ecg_2.runOnUiThread(java.lang.Runnable {
-            respiracion?.setText(p0.toString()).toString()
+            fr?.setText(p0.toString()+" rpm").toString()
         })
 
 
@@ -176,8 +196,11 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         this@ecg_2.runOnUiThread(java.lang.Runnable {
             this.rpiMax?.setText(rrMax.toString()+" ms").toString()
             this.rpiMin?.setText(rrMin.toString()+" ms").toString()
-            //this.hrv?.setText(hrv.toString()).toString()
+            this.hrv?.setText(hrv.toString()+" ms").toString()
+
+
         })
+
 
 
     }
@@ -187,6 +210,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         if(p0 >= 40){
             prefs?.edit()?.putInt("duration",tiempoTimer)?.apply();
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+
             this@ecg_2.runOnUiThread(java.lang.Runnable {
                 Toast.makeText(applicationContext, "Examen Finalizado", Toast.LENGTH_LONG).show()
                 botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
@@ -204,8 +228,11 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         if(p1){
             botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+
             enMedicion=false
         }
+
+
     }
 
     override fun handleMessage(p0: Message): Boolean {
@@ -230,9 +257,14 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
 
     fun goBack(view: View){
         super.onBackPressed()
-
     }
 
+
+   //fun ocultarOverlay(){
+     //  progressOverlay?.visibility = View.GONE;
+
+
+   // }
 
     override fun onSignalQuality(p0: Int) {
         return
@@ -246,7 +278,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             prefs?.edit()?.putBoolean("DatosCapturados",true)?.apply();
             when(key){
                 0 ->{ //RRI MAX
-                    this.rpiMax?.setText(value.toString() + " ms").toString()
+                    this.rpiMax?.setText(value.toString() + "ms").toString()
                     prefs?.edit()?.putInt("rrmax",value)?.apply();
 
                 }
@@ -260,17 +292,19 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
                     prefs?.edit()?.putInt("hr",value)?.apply();
                 }
                 3 ->{ //HRV
-                    //this.hrv?.setText(value.toString()).toString()
+                    this.hrv?.setText(value.toString()).toString()
                     prefs?.edit()?.putInt("hrv",value)?.apply();
                 }
                 4 ->{ //MOOD
                     prefs?.edit()?.putInt("mood",value)?.apply();
                 }
                 5 ->{ //RR
-                    respiracion?.setText(value.toString()).toString()
+                    fr?.setText(value.toString()).toString()
                     prefs?.edit()?.putInt("rr",value)?.apply();
                 }
             }
+
+
         })
 
 
@@ -304,6 +338,7 @@ this@ecg_2.runOnUiThread(java.lang.Runnable {
 })
 graph?.onDataChanged(true,true)
 duracion?.setText(p0.toString()).toString()*/
+
 
 
 }

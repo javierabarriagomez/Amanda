@@ -18,4 +18,5 @@ class ecg : AppCompatActivity() {
     fun goBack(view: View){
         super.onBackPressed()
     }
+
 }

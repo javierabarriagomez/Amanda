@@ -1,9 +1,9 @@
 package com.saludencamino.myapplication
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.content.Context
 import android.os.Message
 import android.view.View
 import android.widget.ImageButton
@@ -31,32 +31,35 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     private var progressOverlay: View? = null
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_presion_sanguinea_2)
-
         sistolica = findViewById(R.id.presionSistolica)
         diastolica = findViewById(R.id.presionDiastolica)
         ritmoCardiaco = findViewById(R.id.ritmoCardico)
         botonMedicion = findViewById(R.id.imageButton5)
         barra_sis = findViewById(R.id.progressBar2)
         barra_dias = findViewById(R.id.progressBar3)
-        progressOverlay = findViewById(R.id.progress_overlay)
+
+
 
 
     }
 
-    fun ocultarOverlay(){
-        this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
-            progressOverlay?.visibility = View.GONE;
-        })
-    }
+
 
 
 
     fun tomarMedicion(view: View){
         println("Empezando medicion")
         progressOverlay?.visibility = View.VISIBLE;
+        //reset values
+        sistolica?.text="0"
+        diastolica?.text="0"
+        barra_sis?.setProgress(0)
+        barra_dias?.setProgress(0)
         if(!enMedicion){
 
             if((this.application as App).version != 1){
@@ -78,7 +81,8 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
                 MonitorDataTransmissionManager.getInstance().stopMeasure()
             }
             enMedicion=false;
-            ocultarOverlay()
+          //  ocultarOverlay()
+
             this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
                 Toast.makeText(this, "Se detuvo la medición", Toast.LENGTH_LONG).show()
             })
@@ -108,7 +112,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onBpResult(sys: Int, dias: Int, hr: Int) {
-        ocultarOverlay()
+        //ocultarOverlay()
         if((this.application as App).version != 1) {
             BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         }else{
@@ -139,7 +143,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
 
     override fun onBpResultError() {
 
-        ocultarOverlay()
+        //ocultarOverlay()
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_LONG).show()
         })
@@ -150,8 +154,8 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onLeakError(p0: Int) {
-        ocultarOverlay()
-        println("Otro error de mierda")
+       // ocultarOverlay()
+        println("ERROR")
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
             Toast.makeText(this, "Error, porfavor intente denuevo", Toast.LENGTH_LONG).show()
         })
@@ -162,7 +166,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onLeadError() {
-        ocultarOverlay()
+        //ocultarOverlay()
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {
@@ -175,7 +179,7 @@ class PresionSanguinea_2 : AppCompatActivity(), IBleWriteResponse, Handler.Callb
     }
 
     override fun onBpError() {
-        ocultarOverlay()
+        //ocultarOverlay()
         BleManager.getInstance().stopMeasure(MeasureType.TYPE_BP,this)
         botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
         this@PresionSanguinea_2.runOnUiThread(java.lang.Runnable {

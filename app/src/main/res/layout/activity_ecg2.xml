@@ -128,6 +128,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <ImageView
+                android:id="@+id/imageView40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/cells" />
+
         </com.google.android.material.card.MaterialCardView>
 
         <!--<LinearLayout
@@ -207,7 +213,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="RRI maximo:"
+                    android:text="RRI máximo:"
                     android:textAlignment="center"
                     android:textColor="@color/input"
                     android:textSize="14dp" />
@@ -221,6 +227,29 @@
                     android:textAlignment="center"
                     android:textColor="@color/input"
                     android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/rpiLabel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="FR:"
+                    android:textAlignment="center"
+                    android:textColor="@color/input"
+                    android:textSize="14dp" />
+
+
+                <TextView
+                    android:id="@+id/fr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text=" 0 rpm"
+                    android:textAlignment="center"
+                    android:textColor="@color/input"
+                    android:textSize="25dp" />
+
+
             </LinearLayout>
 
             <Space
@@ -238,10 +267,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="RRI minimo:"
+                    android:text="RRI mínimo:"
                     android:textAlignment="center"
                     android:textColor="@color/input"
                     android:textSize="14dp" />
+
 
                 <TextView
                     android:id="@+id/rpiMin"
@@ -252,6 +282,29 @@
                     android:textAlignment="center"
                     android:textColor="@color/input"
                     android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="HRV:"
+                    android:textAlignment="center"
+                    android:textColor="@color/input"
+                    android:textSize="14dp" />
+
+
+                <TextView
+                    android:id="@+id/hrv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="0 ms"
+                    android:textAlignment="center"
+                    android:textColor="@color/input"
+                    android:textSize="25dp" />
+
+
             </LinearLayout>
             <Space
                 android:layout_width="wrap_content"
@@ -263,6 +316,12 @@
 
 
         </LinearLayout>
+
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
 
 
@@ -278,4 +337,6 @@
             app:srcCompat="@drawable/iniciar_medicion" />
 
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
