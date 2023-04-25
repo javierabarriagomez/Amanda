@@ -32,7 +32,6 @@ public class App extends Application {
         super.onCreate();
         BleManager.getInstance().init( this);
         app = this;
-
         MonitorDataTransmissionManager.isDebug(true);
         CssServerApi.init(this, "zydb_", true);
         //TODO Create a BleDevManager object

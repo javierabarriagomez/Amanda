@@ -99,6 +99,7 @@ class homeActivity : AppCompatActivity(),IBleConnectionListener,Handler.Callback
         println(oldBleDevice)
         println("botonConectar")
         println(botonConectar)
+
             val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (mBluetoothAdapter == null) {
                 this@homeActivity.runOnUiThread(java.lang.Runnable {

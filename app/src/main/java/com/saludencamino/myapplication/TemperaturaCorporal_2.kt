@@ -20,16 +20,9 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
     private var progressBar: ProgressBar? = null
     private var resultado: TextView? = null
     private var textoResultado: TextView? = null
-    //private var progressOverlay: View? = null
+    private var progressOverlay: View? = null
     private var botonMedicion: ImageButton? = null
-
-
-
-
-
-
-
-
+    private var textenmedicion: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,27 +30,20 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
         this.resultado = findViewById(R.id.textView3)
         this.textoResultado = findViewById(R.id.textView4)
         progressBar = findViewById(R.id.progressBar)
-       // progressOverlay = findViewById(R.id.progress_overlay)
+        progressOverlay = findViewById(R.id.progress_overlay)
         botonMedicion=findViewById(R.id.botonMedicionGlucosa)
-
-
-
-
-
+        textenmedicion = findViewById(R.id.textView16)
     }
 
-   /* fun ocultarOverlay(){
+   fun ocultarOverlay(){
         progressOverlay?.visibility = View.GONE;
+       textenmedicion?.visibility = View.GONE;
 
-
-    }*/
-
-
+       }
 
     fun goBack(view: View){
         super.onBackPressed()
     }
-
 
     fun goHome(view: View){
         val intent = Intent(this,homeActivity::class.java)
@@ -72,10 +58,9 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
         progressBar?.setProgress(0)
         println((this.application as App).version )
         this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
-           // progressOverlay?.visibility = View.VISIBLE;
+            progressOverlay?.visibility = View.VISIBLE;
+            textenmedicion?.visibility = View.VISIBLE;
             botonMedicion?.setImageResource(R.drawable.detener_medicion)
-
-
         })
 
         if((this.application as App).version != 1){
@@ -99,12 +84,8 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                 this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
                     Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
                     botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
-
-
                 })
-               // ocultarOverlay()
-
-
+               ocultarOverlay()
             }
             BleManager.getInstance().startMeasure(MeasureType.TYPE_BT,this)
         }else{
@@ -113,18 +94,13 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
 
                 val prefs = getSharedPreferences(
                     "com.saludencamino.myapplication", Context.MODE_PRIVATE
-
                 )
-
                 prefs.edit().putFloat("temperatura",it.toFloat()).apply();
                 prefs.edit().putBoolean("DatosCapturados",true).apply();
                 println(it)
 
                 resultado?.setText(it.toString() + " °C").toString()
-
                 progressBar?.progress = it.toInt()
-
-
 
                 if(it < 36.5){
                     textoResultado?.setText("Baja").toString()
@@ -140,17 +116,9 @@ class TemperaturaCorporal_2 : AppCompatActivity(), IBleWriteResponse {
                 this@TemperaturaCorporal_2.runOnUiThread(java.lang.Runnable {
                     Toast.makeText(this, "Examen finalizado", Toast.LENGTH_LONG).show()
                     botonMedicion?.setImageResource(R.drawable.iniciar_medicion)
-
-
-
                 })
-
-                // ocultarOverlay()
-
-
             }
             MonitorDataTransmissionManager.getInstance().startMeasure(com.linktop.whealthService.MeasureType.BT)
-
         }
     }
     override fun onWriteSuccess() {

@@ -1,6 +1,7 @@
 package com.saludencamino.myapplication;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -133,12 +134,23 @@ public class HcService extends Service {
                 //Normally,the bluetooth name of Health monitor is start with "HC02" or other custom prefix.
                 //You can use the prefix name to filter all the scanned bluetooth devices to reduce the size of the scanning list.
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     mAdapter.getBluetoothLeScanner().startScan(new ScanCallback() {
+                        @SuppressLint("MissingPermission")
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onScanResult(int callbackType, ScanResult result) {
                             final BluetoothDevice device = result.getDevice();
-                            final String name = device.getName();
+                            @SuppressLint("MissingPermission") final String name = device.getName();
                             if (!TextUtils.isEmpty(name) && name.startsWith("HC02")) {
                                 Log.e("onScanResult", "dev name:" + name);
                                 mAdapter.getBluetoothLeScanner().stopScan(this);
@@ -159,9 +171,10 @@ public class HcService extends Service {
                     });
                 } else {
                     mAdapter.startLeScan(null, new BluetoothAdapter.LeScanCallback() {
+                        @SuppressLint("MissingPermission")
                         @Override
                         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-                            final String name = device.getName();
+                            @SuppressLint("MissingPermission") final String name = device.getName();
                             if (!TextUtils.isEmpty(name) && name.startsWith("HC02")) {
                                 Log.e("onLeScan", "dev name:" + name);
                                 mAdapter.stopLeScan(this);
@@ -180,8 +193,29 @@ public class HcService extends Service {
     public void connect(BluetoothDevice device) {
         setBleState(BluetoothState.BLE_CONNECTING_DEVICE);
         Log.e("dataQueryStep()", "Address:" + device.getAddress());
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mGatt = device.connectGatt(this, false, new BluetoothGattCallback() {
 
+            @SuppressLint("MissingPermission")
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 final BluetoothDevice device = gatt.getDevice();
@@ -191,7 +225,7 @@ public class HcService extends Service {
                         isConnected = true;
                         try {
                             Thread.sleep(200L);
-                            final boolean discoverServices = gatt.discoverServices();
+                            @SuppressLint("MissingPermission") final boolean discoverServices = gatt.discoverServices();
                             Log.e("BluetoothGattCallback", "Now Ble connect to device, name:" + device.getName() + ", address:" + device.getAddress() + ", discoverServices ? " + discoverServices);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -202,8 +236,8 @@ public class HcService extends Service {
                         isConnected = false;
                         if (mHRMEnabledChara != null) {
                             final int charaProp = mHRMEnabledChara.getProperties();
-//                            setCharacteristicNotification(mHRMEnabledChara, false);
-//                            mHRMChara = null;
+                         setCharacteristicNotification(mHRMEnabledChara, false);
+                         mHRMChara = null;
                             if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                                 setCharacteristicNotification(mHRMEnabledChara, false);
                                 mHRMChara = null;
@@ -298,12 +332,13 @@ public class HcService extends Service {
      * @param characteristic Characteristic to act on.
      * @param enabled        If true, enable notification. False otherwise.
      */
+    @SuppressLint("MissingPermission")
     public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (mAdapter == null || mGatt == null) {
             Log.e(TAG, "BluetoothAdapter not initialized");
             return false;
         }
-        final boolean notificationEnable = mGatt.setCharacteristicNotification(characteristic, enabled);
+        @SuppressLint("MissingPermission") final boolean notificationEnable = mGatt.setCharacteristicNotification(characteristic, enabled);
         if (!notificationEnable) return false;
 
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(UUIDConfig.CCC));
@@ -358,6 +393,7 @@ public class HcService extends Service {
      *                 {@link WareType#VER_HARDWARE} hardware version
      *                 {@link WareType#VER_SOFTWARE} software version
      */
+    @SuppressLint("MissingPermission")
     private void getDevWareVersion(@WareType int wareType) {
         if (mGatt == null)
             return;
@@ -524,6 +560,7 @@ public class HcService extends Service {
 //            mBleDevManager.clearCmdToSend(cmd[Protocol.OFFSET_MSG_TYPE], cmd[Protocol.OFFSET_DATA]);
 //        }
 
+        @SuppressLint("MissingPermission")
         @Override
         protected void dealCmd(byte[] cmd) {
             if (mHRMChara != null && mGatt != null && BluetoothAdapter.getDefaultAdapter().isEnabled()) {

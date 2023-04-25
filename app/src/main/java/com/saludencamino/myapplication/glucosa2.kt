@@ -61,11 +61,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
         resultadoBarra2?.setProgress(0)
         if(!enMedicion){
             botonMedicionGlucosa?.setImageResource(R.drawable.detener_medicion)
-
             ayuna?.isClickable=false
-
-
-
 
             if((this.application as App).version != 1) {
                 BleManager.getInstance().setBgResultListener(this)
@@ -117,7 +113,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
     }
 
     override fun onBgResult(p0: Double) {
-        var res = p0*100/7.0;
+        var res = p0 * 18.0182;
 
         val prefs = getSharedPreferences(
             "com.saludencamino.myapplication", Context.MODE_PRIVATE
@@ -126,12 +122,9 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
         prefs.edit().putBoolean("ayuna",ayuna?.isChecked == true ).apply()
         prefs.edit().putBoolean("DatosCapturados",true).apply();
 
-
-
         enMedicion=false
 
         val valor = String.format("%.1f",res)
-
 
         this@glucosa2.runOnUiThread(java.lang.Runnable {
             resultado?.setText(valor).toString()
@@ -175,7 +168,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
         }
         BgTask.EVENT_TEST_RESULT ->{
             var resa = Object as Double;
-            var res = resa*100/7.0;
+            var res = resa * 18.0182;
 
             val prefs = getSharedPreferences(
                 "com.saludencamino.myapplication", Context.MODE_PRIVATE
@@ -187,7 +180,8 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
 
 
             enMedicion=false
-            val mgdl = resa
+
+            val mgdl = resa * 18.0182
             val valor = String.format("%.1f",mgdl)
             prefs.edit().putFloat("glucosa",valor.toFloat()).apply()
             this@glucosa2.runOnUiThread(java.lang.Runnable {
@@ -219,6 +213,7 @@ class glucosa2 : AppCompatActivity(), IBgResultListener, Handler.Callback,
             BgTask.EXCEPTION_TIMEOUT_FOR_DETECT_BLOOD_SAMPLE ->{
                 mensaje?.setText("Error porfavor volver a intentar").toString()
             }
+
         }
         botonMedicionGlucosa?.setImageResource(R.drawable.iniciar_medicion)
         enMedicion=false

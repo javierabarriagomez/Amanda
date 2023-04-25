@@ -38,6 +38,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     private var corazonUI: TextView? = null
     private var botonInicio: ImageButton? = null
     private var progressOverlay: View? = null
+    private var textenmedicion: TextView? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +52,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
         botonInicio = findViewById(R.id.imageButton5)
         corazonUI = findViewById(R.id.CORAZON)
         progressOverlay = findViewById(R.id.progress_overlay)
+        textenmedicion = findViewById(R.id.textView16)
         oxWave = PPGDrawWave()
         graph?.setDrawWave(oxWave)
 
@@ -69,9 +71,10 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
 
 
         if(!isRunning){
-
+            progressOverlay?.visibility = View.VISIBLE;
+            textenmedicion?.visibility = View.VISIBLE;
             this@Saturacion_2.runOnUiThread(java.lang.Runnable {
-                progressOverlay?.visibility = View.VISIBLE;
+
                 botonInicio?.setImageResource(R.drawable.detener_medicion)
 
             })
@@ -93,6 +96,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             if((this.application as App).version != 1) {
 
                 BleManager.getInstance().stopMeasure(MeasureType.TYPE_SPO2,this)
+                ocultarOverlay()
             }else{
                 MonitorDataTransmissionManager.getInstance().stopMeasure()
             }
@@ -111,6 +115,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     }
     fun ocultarOverlay(){
         progressOverlay?.visibility = View.GONE;
+        textenmedicion?.visibility = View.GONE;
 
 
     }
@@ -124,7 +129,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
     }
 
     override fun onBoResultData(corazon: Int, spo2: Double) {
-
+        ocultarOverlay()
         this@Saturacion_2.runOnUiThread(java.lang.Runnable {
 
             progressBar?.progress = spo2.toInt()
@@ -206,6 +211,7 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             } else {
                 resultadoText?.text = "Extremadamente Bajo"
             }
+
         })
 
         if(corazon != 0 && spo2 != 0){
@@ -214,13 +220,14 @@ class Saturacion_2 : AppCompatActivity(), ISpo2ResultListener,IBleWriteResponse,
             })
 
             MonitorDataTransmissionManager.getInstance().stopMeasure()
+
             toastFinalizado()
             isRunning=false;
             tiempo = 0.0
 
 
         }
-        ocultarOverlay()
+
     }
 
     override fun onSpO2Wave(p0: Int) {

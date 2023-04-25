@@ -34,9 +34,6 @@ import java.util.TimerTask
 
 import java.util.Timer
 
-
-
-
 class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handler.Callback,
     ISmctAlgoCallback,OnEcgResultListener{
 
@@ -54,13 +51,9 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     private var tiempoTimer = 0;
     private var timer: Timer? = null;
     private var hrv: TextView? = null;
-   // private var progressBar: ProgressBar? = null
-    //private var progressOverlay: View? = null
-
-
-
-
-
+    private var progressBar: ProgressBar? = null
+    private var progressOverlay: View? = null
+    private var textenmedicion: TextView? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,8 +74,9 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
         graph?.setDrawWave(oxWave)
         tiempo = 0.0
         tiempoTimer = 0
-      //  progressBar = findViewById(R.id.progressBar)
-       // progressOverlay = findViewById(R.id.progress_overlay)
+        progressBar = findViewById(R.id.progressBar)
+        progressOverlay = findViewById(R.id.progress_overlay)
+        textenmedicion = findViewById(R.id.textView16)
 
 
 
@@ -101,7 +95,8 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             botonMedicion?.setImageResource(R.drawable.detener_medicion)
 
             if((this.application as App).version != 1) {
-             //   progressOverlay?.visibility = View.VISIBLE;
+                progressOverlay?.visibility = View.VISIBLE;
+                textenmedicion?.visibility = View.VISIBLE;
                 BleManager.getInstance().setEcgResultListener(this)
                 BleManager.getInstance().startMeasure(MeasureType.TYPE_ECG,this)
 
@@ -141,11 +136,13 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             }
             if((this.application as App).version != 1) {
                 BleManager.getInstance().stopMeasure(MeasureType.TYPE_ECG,this)
+                ocultarOverlay()
             }else{
                 MonitorDataTransmissionManager.getInstance().stopMeasure()
             }
 
             enMedicion=false
+
 
         }
 
@@ -198,7 +195,7 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
             this.rpiMin?.setText(rrMin.toString()+" ms").toString()
             this.hrv?.setText(hrv.toString()+" ms").toString()
 
-
+            ocultarOverlay()
         })
 
 
@@ -260,11 +257,12 @@ class ecg_2 : AppCompatActivity() , IBleWriteResponse, IEcgResultListener, Handl
     }
 
 
-   //fun ocultarOverlay(){
-     //  progressOverlay?.visibility = View.GONE;
+   fun ocultarOverlay(){
+     progressOverlay?.visibility = View.GONE;
+       textenmedicion?.visibility = View.GONE;
 
 
-   // }
+   }
 
     override fun onSignalQuality(p0: Int) {
         return
